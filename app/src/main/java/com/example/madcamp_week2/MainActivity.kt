@@ -1,47 +1,56 @@
 package com.example.madcamp_week2
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.madcamp_week2.ui.theme.Madcamp_week2Theme
+import android.util.Log
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
+    private lateinit var itemsTextView: TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            Madcamp_week2Theme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+        setContentView(R.layout.activity_main)
+
+        itemsTextView = findViewById(R.id.itemsTextView)
+
+        fetchItems()
+    }
+
+    private fun fetchItems() {
+        val call = ApiClient.apiService.getItems()
+
+        call.enqueue(object : Callback<List<TodoItem>> {
+            override fun onResponse(call: Call<List<TodoItem>>, response: Response<List<TodoItem>>) {
+                if (response.isSuccessful) {
+                    val items = response.body()!!
+                    displayItems(items)
+                } else {
+                    Log.e("MainActivity", "Request failed with response code ${response.code()}")
                 }
             }
-        }
+
+            override fun onFailure(call: Call<List<TodoItem>>, t: Throwable) {
+                Log.e("MainActivity", "Network request failed", t)
+            }
+        })
     }
-}
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    Madcamp_week2Theme {
-        Greeting("Android")
+    private fun displayItems(items: List<TodoItem>) {
+        val stringBuilder = StringBuilder()
+        for (item in items) {
+            stringBuilder.append("title: ${item.title}\n")
+            stringBuilder.append("completed: ${item.completed}\n\n")
+            Log.d("DISPLAY", "title: ${item.title}, completed: ${item.completed}")
+        }
+        itemsTextView.text = stringBuilder.toString()
     }
 }
