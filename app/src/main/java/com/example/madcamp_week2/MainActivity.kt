@@ -15,6 +15,7 @@ import com.jjoe64.graphview.DefaultLabelFormatter
 import com.jjoe64.graphview.GraphView
 import com.jjoe64.graphview.series.DataPoint
 import com.jjoe64.graphview.series.LineGraphSeries
+import com.example.madcamp_week2.Strategy.StrategyFragment
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
