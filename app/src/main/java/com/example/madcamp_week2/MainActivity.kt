@@ -9,6 +9,7 @@ import com.example.madcamp_week2.ui.theme.Madcamp_week2Theme
 import android.util.Log
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.example.madcamp_week2.Strategy.StrategyFragment
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -21,6 +22,13 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         itemsTextView = findViewById(R.id.itemsTextView)
+
+        // 내가 추가
+        val fragment = StrategyFragment()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .commit()
+        // 내가 추가
 
         fetchItems()
     }

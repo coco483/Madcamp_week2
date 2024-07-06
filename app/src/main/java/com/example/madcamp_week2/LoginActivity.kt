@@ -7,6 +7,7 @@ import android.util.Log
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.madcamp_week2.Strategy.StrategyFragment
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -69,7 +70,7 @@ class LoginActivity : AppCompatActivity() {
 
             // 사용자 정보 서버에 전송
             val user = User(
-                id = account?.idToken ?: "",
+                id = account?.id ?: "",
                 email = account?.email,
                 displayName = account?.displayName
             )
