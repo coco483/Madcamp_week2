@@ -12,6 +12,15 @@ import com.jjoe64.graphview.series.DataPoint
 import com.jjoe64.graphview.series.LineGraphSeries
 import java.text.SimpleDateFormat
 import java.util.Date
+import com.example.madcamp_week2.MyLanguage.Action
+import com.example.madcamp_week2.MyLanguage.MyBool
+import com.example.madcamp_week2.MyLanguage.MyCompare
+import com.example.madcamp_week2.MyLanguage.MyNum
+import com.example.madcamp_week2.MyLanguage.TradePlan
+import com.example.madcamp_week2.MyLanguage.TradeType
+import com.example.madcamp_week2.MyLanguage.Comparator
+import com.example.madcamp_week2.MyLanguage.MyNot
+import com.example.madcamp_week2.MyLanguage.StockPrice
 
 class StockDetailFragment: Fragment() {
     private var _binding: FragmentStockDetailBinding? = null
@@ -39,11 +48,23 @@ class StockDetailFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         reloadGraph(binding.stockDetailGraphGV, 'D')
+
+
+        val comparator = Comparator.LT
+        var condition: MyBool = MyCompare(MyNum(80000f), StockPrice("005930"), comparator)
+        condition = MyNot(condition)
+        val tradePlan = TradePlan(  TradeType.BUY, Stock("005930", "삼성전자", "KOSPI"), MyNum(100f) )
+        val involvedStocks: List<Stock> = listOf(Stock("005930", "삼성전자", "KOSPI"))
+        val action = Action(condition, tradePlan, involvedStocks)
+        val requestList = action.getAllRequests("20240607", "20240706")
+        var str = "start\n"
+        for (request in requestList) {
+            str += "${request.date}, ${request.stock}, ${request.stockAmount}, ${request.tradeType}\n"
+        }
+        binding.textView.text = str
     }
 
     private fun reloadGraph(graph: GraphView, period: Char){
-        val dateFormat = SimpleDateFormat("yyyymmdd")
-        val currentDate = dateFormat.format(Date())
         var dailyStockJson = getHistoryData(stockId, "20160101", "20240706", 'D')
         var dailyStockData = dailyStockJson?.let { parseHistoryData(it) }
 

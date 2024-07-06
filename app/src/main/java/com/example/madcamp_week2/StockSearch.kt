@@ -52,5 +52,6 @@ fun getHistoryData(stockCode: String, startDate: String, endDate: String, period
 
 fun parseHistoryData(responseStr:String): List<stockData>{
     val stockData = Gson().fromJson(responseStr, Outputs::class.java)
+    Log.d("Parsing!", responseStr)
     return stockData.output2
 }

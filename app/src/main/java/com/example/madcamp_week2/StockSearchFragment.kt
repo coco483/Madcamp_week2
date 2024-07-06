@@ -33,6 +33,8 @@ class StockSearchFragment: Fragment() {
             val selectedStock = adapterView.getItemAtPosition(i) as Stock
             openStockDetailFragment(selectedStock)
         }
+
+
     }
     private fun openStockDetailFragment(stock: Stock) {
         val stockDetailFragment = StockDetailFragment().apply {

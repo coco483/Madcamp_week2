@@ -1,55 +1,48 @@
 package com.example.madcamp_week2.MyLanguage
 
+import com.example.madcamp_week2.stockData
+
 abstract class MyBool {
-    abstract val isStatic: Boolean
-    abstract val value: Boolean
-    abstract val _value:Boolean?
-    abstract fun evaluate(): Boolean
+    abstract fun evaluate(stockPriceMap : Map<String, Float>): Boolean
 }
 
 class MyAnd  (
     private val rightOperand: MyBool,
     private val leftOperand: MyBool
 ): MyBool(){
-    override val isStatic = rightOperand.isStatic && leftOperand.isStatic
-    override val _value = if (isStatic) evaluate() else null
-    override val value: Boolean
-        get() = _value ?: evaluate()
-    override fun evaluate(): Boolean = rightOperand.evaluate() && leftOperand.evaluate()
+    override fun evaluate(stockPriceMap: Map<String, Float>): Boolean
+    = rightOperand.evaluate(stockPriceMap) && leftOperand.evaluate(stockPriceMap)
 }
 
 class MyOr  (
     private val rightOperand: MyBool,
     private val leftOperand: MyBool
 ): MyBool(){
-    override val isStatic = rightOperand.isStatic && leftOperand.isStatic
-    override val _value = if (isStatic) evaluate() else null
-    override val value: Boolean
-        get() = _value ?: evaluate()
-    override fun evaluate(): Boolean = rightOperand.evaluate() || leftOperand.evaluate()
+    override fun evaluate(stockPriceMap: Map<String, Float>): Boolean
+    = rightOperand.evaluate(stockPriceMap) || leftOperand.evaluate(stockPriceMap)
 }
 
 class MyNot  (
     private val operand: MyBool,
 ): MyBool(){
-    override val isStatic = operand.isStatic
-    override val _value = if (isStatic) evaluate() else null
-    override val value: Boolean
-        get() = _value ?: evaluate()
-    override fun evaluate(): Boolean = !(operand.evaluate())
+    override fun evaluate(stockPriceMap: Map<String, Float>): Boolean
+    = !(operand.evaluate(stockPriceMap))
 }
 
 class MyCompare (
-    private val rightOperand: MyInt,
-    private val leftOperand: MyInt,
-    private val compare_operator: MyCompareOperator
+    private val rightOperand: MyFloat,
+    private val leftOperand: MyFloat,
+    private val comparator: Comparator
 ): MyBool(){
-    override val isStatic = rightOperand.isStatic && leftOperand.isStatic
-    override val _value = if (isStatic) evaluate() else null
-    override val value: Boolean
-        get() = _value ?: evaluate()
-    override fun evaluate(): Boolean = compare_operator.compare(rightOperand, leftOperand)
+    override fun evaluate(stockPriceMap: Map<String, Float>): Boolean
+    = comparator.compare(rightOperand.evaluate(stockPriceMap), leftOperand.evaluate(stockPriceMap))
 }
 
+enum class Comparator(val compare: (Float, Float) -> Boolean) {
+    GT({ x, y -> x > y }),
+    LT({ x, y -> x < y }),
+    GTE({ x, y -> x >= y }),
+    LTE({ x, y -> x <= y });
+}
 
 
