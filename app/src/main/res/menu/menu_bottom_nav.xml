@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/tab1"
+        android:enabled="true"
+        android:title="search"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/tab2"
+        android:enabled="true"
+        android:title="add strategy"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/tab3"
+        android:enabled="true"
+        android:title="my strategy"
+        app:showAsAction="ifRoom" />
+</menu>
