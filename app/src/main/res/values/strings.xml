@@ -1,5 +1,4 @@
 <resources>
     <string name="app_name">Madcamp_week2</string>
-    <string name="default_web_client_id"></string>
-    <string name="client_secret"></string>
+    <string name="default_web_client_id">133250259796-ipejhpjpeepgiqt8ahu2ss60999jd989.apps.googleusercontent.com</string>
 </resources>
