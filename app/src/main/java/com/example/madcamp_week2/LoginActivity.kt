@@ -69,7 +69,7 @@ class LoginActivity : AppCompatActivity() {
 
             // 사용자 정보 서버에 전송
             val user = User(
-                id = account?.id ?: "",
+                id = account?.idToken ?: "",
                 email = account?.email,
                 displayName = account?.displayName
             )
