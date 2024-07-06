@@ -5,3 +5,5 @@ data class TodoItem (
     val title: String,
     val completed: Boolean
 )
+
+// client가 server로 보내는 것
