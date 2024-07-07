@@ -3,34 +3,42 @@ package com.example.madcamp_week2.CodeBlock
 import android.content.Context
 import android.widget.Toast
 import com.example.madcamp_week2.MyLanguage.Action
-import com.example.madcamp_week2.MyLanguage.MyBool
 import com.example.madcamp_week2.MyLanguage.TradePlan
-import com.example.madcamp_week2.Stock
+import com.example.madcamp_week2.MyLanguage.TradeType
 
-abstract class BoolBlock {
-    abstract fun getMyBool() : MyBool?
-}
 class TradePlanBlock {
-    fun getTradePlan(): TradePlan? {
-        TODO("not yet")
+    var tradeType: TradeType? = null
+    var stockId: String? = null
+    var amountBlock: FloatBlock? = null
+    fun getTradePlan(context: Context): Pair<TradePlan, List<String>>? {
+        if (tradeType == null) {
+            Toast.makeText(context, "please fill in the tradeType", Toast.LENGTH_LONG).show()
+        } else if (stockId == null){
+            Toast.makeText(context, "please fill in the trade stock Name", Toast.LENGTH_LONG).show()
+        } else if (amountBlock == null){
+            Toast.makeText(context, "please fill in the trade amount", Toast.LENGTH_LONG).show()
+        } else {
+            val (amount, idList) = amountBlock!!.getMyFloat(context) ?: Pair(null, listOf())
+            if (amount != null){
+                return Pair(TradePlan(tradeType!!, stockId!!, amount), (idList+listOf(stockId!!)))
+            }
+        }
+        return null
     }
 }
 class ActionBlock {
-    var condition: BoolBlock? = null
-    var tradePlan: TradePlanBlock? = null
-    val involvedStockId: MutableList<String> = mutableListOf()
+    var conditionBlock: BoolBlock? = null
+    var tradePlanBlock: TradePlanBlock? = null
     fun getAction(context: Context): Action? {
-        if (condition == null) {
+        if (conditionBlock == null) {
             Toast.makeText(context, "please fill in the condition", Toast.LENGTH_LONG).show()
-            return null
-        } else if (tradePlan == null){
+        } else if (tradePlanBlock == null){
             Toast.makeText(context, "please fill in the tradePlan", Toast.LENGTH_LONG).show()
-            return null
-        } else{
-            val init_condition = condition!!.getMyBool()
-            val init_tradePlan = tradePlan!!.getTradePlan()
-            if (init_tradePlan != null && init_condition != null) {
-                return Action(init_condition, init_tradePlan, involvedStockId)
+        } else {
+            val (condition, list1) = conditionBlock!!.getMyBool(context) ?: Pair(null, listOf())
+            val (tradePlan, list2) = tradePlanBlock!!.getTradePlan(context) ?: Pair(null, listOf())
+            if (tradePlan != null && condition != null) {
+                return Action(condition, tradePlan, (list1 + list2))
             }
         }
         return null

@@ -11,14 +11,14 @@ import com.jjoe64.graphview.GraphView
 import com.jjoe64.graphview.series.DataPoint
 import com.jjoe64.graphview.series.LineGraphSeries
 import com.example.madcamp_week2.MyLanguage.Action
+import com.example.madcamp_week2.MyLanguage.CompareOperator
 import com.example.madcamp_week2.MyLanguage.MyBool
 import com.example.madcamp_week2.MyLanguage.MyCompare
 import com.example.madcamp_week2.MyLanguage.MyNum
 import com.example.madcamp_week2.MyLanguage.TradePlan
 import com.example.madcamp_week2.MyLanguage.TradeType
-import com.example.madcamp_week2.MyLanguage.Comparator
 import com.example.madcamp_week2.MyLanguage.MyNot
-import com.example.madcamp_week2.MyLanguage.StockPrice
+import com.example.madcamp_week2.MyLanguage.MyStockPrice
 import com.example.madcamp_week2.MyLanguage.Strategy
 
 class StockDetailFragment: Fragment() {
@@ -50,13 +50,13 @@ class StockDetailFragment: Fragment() {
 
 
         // This is for testing
-        val comparator = Comparator.LT
-        var condition: MyBool = MyCompare(MyNum(80000f), StockPrice("005930"), comparator)
+        val comparator = CompareOperator.LT
+        var condition: MyBool = MyCompare(MyNum(80000f), MyStockPrice("005930"), comparator)
         condition = MyNot(condition)
-        val tradePlan = TradePlan(  TradeType.SELL,"005930", StockPrice("005930") )
+        val tradePlan = TradePlan(  TradeType.BUY,"005930", MyStockPrice("005930") )
         val involvedStockId: List<String> = listOf("005930")
         val action = Action(condition, tradePlan, involvedStockId)
-        val strategy = Strategy("myStrategy", listOf(Stock("005930", "삼성전자", "KOSPI")), listOf(action))
+        val strategy = Strategy("myStrategy", listOf("005930"), listOf(action))
 
         binding.textView.text = strategy.calculate("20240607", "20240706", 1000000).toString()
     }
@@ -89,7 +89,7 @@ class StockDetailFragment: Fragment() {
                 return if (isValueX) {
                     // show normal x values
                     val index = value.toInt()
-                    stockDatas[index].stck_bsop_date ?: "00000000"
+                    stockDatas[index].stck_bsop_date
                 } else {
                     // show currency for y values
                     super.formatLabel(value, isValueX) + "원"
@@ -99,7 +99,7 @@ class StockDetailFragment: Fragment() {
         graph.gridLabelRenderer.setHorizontalLabelsAngle(150)
         graph.viewport.isScrollable = true
         graph.viewport.setXAxisBoundsManual(true)
-        graph.viewport.setMinX(50.0)
+        graph.viewport.setMinX(0.0)
         graph.viewport.setMaxX(99.0)
     }
 

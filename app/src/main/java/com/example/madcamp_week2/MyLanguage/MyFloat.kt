@@ -7,31 +7,22 @@ abstract class MyFloat {
     abstract fun evaluate(stockPriceMap: Map<String, stockData>): Float
 }
 
-class MyAdd(
+enum class FloatOperator (val calculate: (Float, Float) -> Float) {
+    ADD({ x, y -> x + y }),
+    SUB({ x, y -> x - y }),
+    MUL({ x, y -> x * y }),
+    DIV({ x, y -> x / y });
+}
+class MyFloatBinaryOp(
     private val rightOperand: MyFloat,
-    private val leftOperand: MyFloat
+    private val leftOperand: MyFloat,
+    private val floatOperator : FloatOperator
 ): MyFloat(){
     override fun evaluate(stockPriceMap: Map<String, stockData>): Float
-    = rightOperand.evaluate(stockPriceMap) + leftOperand.evaluate(stockPriceMap)
+            = floatOperator.calculate(rightOperand.evaluate(stockPriceMap), leftOperand.evaluate(stockPriceMap))
 }
 
-class MySub(
-    private val rightOperand: MyFloat,
-    private val leftOperand: MyFloat
-): MyFloat(){
-    override fun evaluate(stockPriceMap: Map<String, stockData>): Float
-    = rightOperand.evaluate(stockPriceMap) - leftOperand.evaluate(stockPriceMap)
-}
-
-class MyMultiply(
-    private val rightOperand: MyFloat,
-    private val leftOperand: MyFloat
-): MyFloat(){
-    override fun evaluate(stockPriceMap: Map<String, stockData>): Float
-    = rightOperand.evaluate(stockPriceMap) * leftOperand.evaluate(stockPriceMap)
-}
-
-class StockPrice(
+class MyStockPrice(
     val stockID: String
 ): MyFloat(){
     override fun evaluate(stockPriceMap: Map<String, stockData>): Float {

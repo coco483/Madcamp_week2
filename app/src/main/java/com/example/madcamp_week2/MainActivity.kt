@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
                     var selectedFragment: Fragment?= null
                     when(item.itemId) {
                         R.id.tab1 -> selectedFragment = StockSearchFragment()
-                        R.id.tab2 -> selectedFragment = StockSearchFragment()
+                        R.id.tab2 -> selectedFragment = StrategyAddFragment()
                         R.id.tab3 -> selectedFragment = StockSearchFragment()
                     }
                     selectedFragment?.let {

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:background="#90CAF9"
+    android:padding ="5dp">
+
+    <EditText
+        android:id="@+id/num_block_num_ET"
+        android:background="#BBDEFB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:ems="3"
+        android:inputType="numberDecimal"
+        android:hint="숫자" />
+</LinearLayout>

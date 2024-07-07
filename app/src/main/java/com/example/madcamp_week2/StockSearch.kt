@@ -6,12 +6,14 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import java.lang.Thread.sleep
 
 data class Outputs(val output1: Output1, val output2: List<stockData>)
 data class Output1(val hts_kor_isnm: String)
 data class stockData(val stck_bsop_date: String, val stck_clpr: Double)
 
 fun getHistoryData(stockCode: String, startDate: String, endDate: String, period: Char): String? {
+    Log.d("ApiRequest", "stockCode: $stockCode")
     if ( period !in listOf('D', 'W', 'M', 'Y')) {
         Log.d("StockSearch", "$period is not a valid input")
         return null
@@ -29,7 +31,7 @@ fun getHistoryData(stockCode: String, startDate: String, endDate: String, period
     val request = Request.Builder()
         .url(dailyPriceUrl)
         .addHeader("content-type", "application/json")
-        .addHeader("authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsImF1ZCI6IjUyMTMyMmIxLTUyYTQtNGE5Yi1hZjA5LTQzMTFlZmJmYjQwZiIsInByZHRfY2QiOiIiLCJpc3MiOiJ1bm9ndyIsImV4cCI6MTcyMDM1MzAyMywiaWF0IjoxNzIwMjY2NjIzLCJqdGkiOiJQU0NBTUNwUm5qSW81MkF0Y29veTNLU1REVkd4emx2TFhLTWcifQ.Q-DZ_OZ1WMzdYHZo8BGFZb74-suRSN5i0W6KhpaeKivCR-zczGqafW9WguAvELaPLEWL4dEQTmIYxH1fhpSAGA")
+        .addHeader("authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsImF1ZCI6ImNjNzRhMDUxLWUzMzMtNGJiNC05MTUwLTZiYmRiZmM1NTM2ZCIsInByZHRfY2QiOiIiLCJpc3MiOiJ1bm9ndyIsImV4cCI6MTcyMDQzOTQwMSwiaWF0IjoxNzIwMzUzMDAxLCJqdGkiOiJQU0NBTUNwUm5qSW81MkF0Y29veTNLU1REVkd4emx2TFhLTWcifQ.GpxnLq8UkiDIc7Vo1RmHqbVTU9S1M6T0uPdc8PwQB3ID9nJwNxhQ1azAlCjjeDqYmgP99LCdpPfXhZlXJNPokg")
         .addHeader("appkey", "PSCAMCpRnjIo52Atcooy3KSTDVGxzlvLXKMg")
         .addHeader("appsecret", "aJ4WQxVfByuf5WWoO5IeRFvphNJWBYJpq00zvobmtmx6w9n7CdxRj9mbK13S3F343wjI26kT3yvwcpozDPY5Hx3qH6ODmNuEUqoDbgGZ1seuwWSeT5X8bd/HkiqqN8kFlHVk1TlYkm1U5MXIqxAtnITJGSti7WEm9ggKTC3UY6zQDQ9oUAs=")
         .addHeader("tr_id", "FHKST03010100")
@@ -47,6 +49,7 @@ fun getHistoryData(stockCode: String, startDate: String, endDate: String, period
         }
     }
     loadPriceThread.start()
+    Thread.sleep(500)
     loadPriceThread.join()
     return dailyStockJson
 }

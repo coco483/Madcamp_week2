@@ -7,7 +7,7 @@ import com.example.madcamp_week2.stockData
 class Action(
     val condition: MyBool,
     val tradePlan: TradePlan,
-    val involvedStockId: List<String>
+    val involvedStockIdList: List<String>
 ) {
     fun getAllRequests(startDate:String, endDate:String, involvedStockData: Map<String, Map<String, stockData>>): List<TradeRequest> {
         //involvedStockData: stockID -> { date -> stockData }

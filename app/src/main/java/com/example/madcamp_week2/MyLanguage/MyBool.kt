@@ -6,20 +6,17 @@ abstract class MyBool {
     abstract fun evaluate(stockPriceMap : Map<String, stockData>): Boolean
 }
 
-class MyAnd  (
-    private val rightOperand: MyBool,
-    private val leftOperand: MyBool
-): MyBool(){
-    override fun evaluate(stockPriceMap: Map<String, stockData>): Boolean
-    = rightOperand.evaluate(stockPriceMap) && leftOperand.evaluate(stockPriceMap)
+enum class BoolOperator (val calculate: (Boolean, Boolean) -> Boolean) {
+    AND({ x, y -> x && y }),
+    OR({ x, y -> x || y }),
 }
-
-class MyOr  (
+class MyBoolBinaryOp(
     private val rightOperand: MyBool,
-    private val leftOperand: MyBool
+    private val leftOperand: MyBool,
+    private val boolOperator : BoolOperator
 ): MyBool(){
     override fun evaluate(stockPriceMap: Map<String, stockData>): Boolean
-    = rightOperand.evaluate(stockPriceMap) || leftOperand.evaluate(stockPriceMap)
+            = boolOperator.calculate(rightOperand.evaluate(stockPriceMap), leftOperand.evaluate(stockPriceMap))
 }
 
 class MyNot  (
@@ -29,20 +26,22 @@ class MyNot  (
     = !(operand.evaluate(stockPriceMap))
 }
 
-class MyCompare (
-    private val rightOperand: MyFloat,
-    private val leftOperand: MyFloat,
-    private val comparator: Comparator
-): MyBool(){
-    override fun evaluate(stockPriceMap: Map<String, stockData>): Boolean
-    = comparator.compare(rightOperand.evaluate(stockPriceMap), leftOperand.evaluate(stockPriceMap))
-}
-
-enum class Comparator(val compare: (Float, Float) -> Boolean) {
+enum class CompareOperator(val compare: (Float, Float) -> Boolean) {
     GT({ x, y -> x > y }),
     LT({ x, y -> x < y }),
     GTE({ x, y -> x >= y }),
     LTE({ x, y -> x <= y });
 }
+
+class MyCompare (
+    private val rightOperand: MyFloat,
+    private val leftOperand: MyFloat,
+    private val comparator: CompareOperator
+): MyBool(){
+    override fun evaluate(stockPriceMap: Map<String, stockData>): Boolean
+    = comparator.compare(rightOperand.evaluate(stockPriceMap), leftOperand.evaluate(stockPriceMap))
+}
+
+
 
 

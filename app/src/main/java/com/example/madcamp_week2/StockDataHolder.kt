@@ -12,7 +12,6 @@ object StockDataHolder {
                 .bufferedReader().use { it.readText() }
             val listType = object : TypeToken<List<Stock>>() {}.type
             stockList = Gson().fromJson(jsonStr, listType)
-
         }
     }
 }
