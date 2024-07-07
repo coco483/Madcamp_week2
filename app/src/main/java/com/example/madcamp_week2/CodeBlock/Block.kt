@@ -18,7 +18,7 @@ class TradePlanBlock {
 class ActionBlock {
     var condition: BoolBlock? = null
     var tradePlan: TradePlanBlock? = null
-    var involvedStocks: MutableList<Stock> = mutableListOf<Stock>()
+    val involvedStockId: MutableList<String> = mutableListOf()
     fun getAction(context: Context): Action? {
         if (condition == null) {
             Toast.makeText(context, "please fill in the condition", Toast.LENGTH_LONG).show()
@@ -30,7 +30,7 @@ class ActionBlock {
             val init_condition = condition!!.getMyBool()
             val init_tradePlan = tradePlan!!.getTradePlan()
             if (init_tradePlan != null && init_condition != null) {
-                return Action(init_condition, init_tradePlan, involvedStocks)
+                return Action(init_condition, init_tradePlan, involvedStockId)
             }
         }
         return null

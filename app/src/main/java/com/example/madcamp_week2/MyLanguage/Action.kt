@@ -2,42 +2,38 @@ package com.example.madcamp_week2.MyLanguage
 
 import android.util.Log
 import com.example.madcamp_week2.Stock
-import com.example.madcamp_week2.getHistoryData
-import com.example.madcamp_week2.parseHistoryData
 import com.example.madcamp_week2.stockData
 
 class Action(
     val condition: MyBool,
     val tradePlan: TradePlan,
-    val involvedStocks: List<Stock>
+    val involvedStockId: List<String>
 ) {
-    fun getAllRequests(startDate:String, endDate:String): List<TradeRequest> {
-        if (involvedStocks.isEmpty()) Log.d("Action", "There should be one stock involved")
-        val tradeRequestList = mutableListOf<TradeRequest>()
+    fun getAllRequests(startDate:String, endDate:String, involvedStockData: Map<String, Map<String, stockData>>): List<TradeRequest> {
+        //involvedStockData: stockID -> { date -> stockData }
 
-        // request all stock price data from api
-        val allStockData: MutableList<Pair<String, List<stockData>>> = mutableListOf()
-        for (stock in involvedStocks){
-            val dailyStockJson = getHistoryData(stock.id, startDate, endDate, 'D')
-            val dailyStockData = parseHistoryData(dailyStockJson!!)
-            allStockData.add(Pair(stock.id, dailyStockData))
-            Log.d("Action", "involved stock ${stock.name} added: $dailyStockJson")
-        }
         // find all trade requests that will happen
-        val num_response = allStockData[0].second.size
-        Log.d("Action", "allStockData: $allStockData")
-        Log.d("Action", "num_response is $num_response")
-        for (i in 0 until num_response){
-            val stockPriceMap : MutableMap<String, Float> = mutableMapOf()
-            for ((stockID, dailyStockData) in allStockData){
-                stockPriceMap[stockID] = dailyStockData[i].stck_clpr.toFloat()
+        val firstEntry = involvedStockData.entries.first()
+        val numResponse = firstEntry.value.size
+        Log.d("Action", "allStockData: $involvedStockData")
+        Log.d("Action", "num_response is $numResponse")
+
+        // convert into date -> { stockID -> stockData }
+        val dateToStockDataMap: MutableMap<String, MutableMap<String, stockData>> = mutableMapOf()
+        for ((stockID, dateMap) in involvedStockData) {
+            for ((date, stockData) in dateMap) {
+                val stockPriceMap = dateToStockDataMap.getOrPut(date) { mutableMapOf() }
+                stockPriceMap[stockID] = stockData
             }
+        }
+        // collect all possible tradeRequest
+        val tradeRequestList: MutableList<TradeRequest> = mutableListOf()
+        for ((date,stockPriceMap) in dateToStockDataMap){
             if (condition.evaluate(stockPriceMap)) {
-                val request = tradePlan.makeTradeRequest(allStockData[0].second[i].stck_bsop_date, stockPriceMap)
+                val request = tradePlan.makeTradeRequest(date, stockPriceMap)
                 tradeRequestList.add(request)
             }
         }
-
         return tradeRequestList
     }
 }
@@ -47,16 +43,16 @@ enum class TradeType {BUY, SELL}
 class TradeRequest(
     val date: String,
     val tradeType: TradeType,
-    val stock: Stock,
+    val stockId: String,
     val stockAmount: Float
 )
 
 class TradePlan (
     val tradeType: TradeType,
-    val stock: Stock,
+    val stockId: String,
     val amount: MyFloat
 ){
-    fun makeTradeRequest(date:String, stockPriceMap: Map<String, Float>):TradeRequest{
-        return TradeRequest(date, tradeType, stock, amount.evaluate(stockPriceMap))
+    fun makeTradeRequest(date:String, stockPriceMap: Map<String, stockData>):TradeRequest{
+        return TradeRequest(date, tradeType, stockId, amount.evaluate(stockPriceMap))
     }
 }

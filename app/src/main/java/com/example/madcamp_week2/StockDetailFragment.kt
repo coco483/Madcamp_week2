@@ -10,8 +10,6 @@ import com.jjoe64.graphview.DefaultLabelFormatter
 import com.jjoe64.graphview.GraphView
 import com.jjoe64.graphview.series.DataPoint
 import com.jjoe64.graphview.series.LineGraphSeries
-import java.text.SimpleDateFormat
-import java.util.Date
 import com.example.madcamp_week2.MyLanguage.Action
 import com.example.madcamp_week2.MyLanguage.MyBool
 import com.example.madcamp_week2.MyLanguage.MyCompare
@@ -21,6 +19,7 @@ import com.example.madcamp_week2.MyLanguage.TradeType
 import com.example.madcamp_week2.MyLanguage.Comparator
 import com.example.madcamp_week2.MyLanguage.MyNot
 import com.example.madcamp_week2.MyLanguage.StockPrice
+import com.example.madcamp_week2.MyLanguage.Strategy
 
 class StockDetailFragment: Fragment() {
     private var _binding: FragmentStockDetailBinding? = null
@@ -50,22 +49,20 @@ class StockDetailFragment: Fragment() {
         reloadGraph(binding.stockDetailGraphGV, 'D')
 
 
+        // This is for testing
         val comparator = Comparator.LT
         var condition: MyBool = MyCompare(MyNum(80000f), StockPrice("005930"), comparator)
         condition = MyNot(condition)
-        val tradePlan = TradePlan(  TradeType.BUY, Stock("005930", "삼성전자", "KOSPI"), MyNum(100f) )
-        val involvedStocks: List<Stock> = listOf(Stock("005930", "삼성전자", "KOSPI"))
-        val action = Action(condition, tradePlan, involvedStocks)
-        val requestList = action.getAllRequests("20240607", "20240706")
-        var str = "start\n"
-        for (request in requestList) {
-            str += "${request.date}, ${request.stock}, ${request.stockAmount}, ${request.tradeType}\n"
-        }
-        binding.textView.text = str
+        val tradePlan = TradePlan(  TradeType.SELL,"005930", StockPrice("005930") )
+        val involvedStockId: List<String> = listOf("005930")
+        val action = Action(condition, tradePlan, involvedStockId)
+        val strategy = Strategy("myStrategy", listOf(Stock("005930", "삼성전자", "KOSPI")), listOf(action))
+
+        binding.textView.text = strategy.calculate("20240607", "20240706", 1000000).toString()
     }
 
     private fun reloadGraph(graph: GraphView, period: Char){
-        var dailyStockJson = getHistoryData(stockId, "20160101", "20240706", 'D')
+        var dailyStockJson = getHistoryData(stockId, "20160101", "20240706", period)
         var dailyStockData = dailyStockJson?.let { parseHistoryData(it) }
 
         dailyStockData = dailyStockData?.reversed()

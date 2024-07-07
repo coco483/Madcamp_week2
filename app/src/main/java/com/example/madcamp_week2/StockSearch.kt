@@ -3,6 +3,7 @@ package com.example.madcamp_week2
 import android.app.VoiceInteractor
 import android.util.Log
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import okhttp3.OkHttpClient
 import okhttp3.Request
 
