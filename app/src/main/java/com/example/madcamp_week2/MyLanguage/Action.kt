@@ -1,7 +1,6 @@
 package com.example.madcamp_week2.MyLanguage
 
 import android.util.Log
-import com.example.madcamp_week2.Stock
 import com.example.madcamp_week2.stockData
 import kotlinx.serialization.Serializable
 

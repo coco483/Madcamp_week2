@@ -1,6 +1,7 @@
 package com.example.madcamp_week2
 
 import android.content.Context
+import com.example.madcamp_week2.Class.Stock
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 

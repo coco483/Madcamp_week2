@@ -1,5 +1,6 @@
 // StrategyAdapter.kt
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,21 +8,17 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.madcamp_week2.MyLanguage.Strategy
 import com.example.madcamp_week2.R
-import com.example.madcamp_week2.Strategy.Strategy
+import com.example.madcamp_week2.StockDetailFragment
+import com.example.madcamp_week2.Strategy.StrategyFragment
 import com.example.madcamp_week2.Strategy.TagAdapter
 
-class StrategyAdapter(private var itemList: MutableList<Strategy>) :
+class StrategyAdapter(private var itemList: MutableList<Strategy>, val onclick: (Int) -> Int) :
     RecyclerView.Adapter<StrategyAdapter.Holder>() {
 
     interface OnItemClickListener {
         fun onCardViewClick(view: View, strategyItem: Strategy, pos: Int)
-    }
-
-    private var listener: OnItemClickListener? = null
-
-    fun setOnItemClickListener(listener: OnItemClickListener) {
-        this.listener = listener
     }
 
     fun updateStrategyList(newStrategyList: List<Strategy>) {
@@ -47,7 +44,7 @@ class StrategyAdapter(private var itemList: MutableList<Strategy>) :
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
         val strategyItem = itemList[position]
-        holder.bind(strategyItem, position + 1) // position + 1을 넘겨줘서 순번을 설정
+        holder.bind(strategyItem, position) // position + 1을 넘겨줘서 순번을 설정
     }
 
     inner class Holder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -61,17 +58,18 @@ class StrategyAdapter(private var itemList: MutableList<Strategy>) :
             strategyTitle.text = strategyItem.title
 
             // 순번 설정
-            itemNumber.text = position.toString()
+            val numbering =  (position+1).toString()
+            itemNumber.text = numbering
 
             // 태그 RecyclerView 설정
             strategyTagRecyclerView.apply {
                 layoutManager =
                     LinearLayoutManager(itemView.context, LinearLayoutManager.HORIZONTAL, false)
-                adapter = TagAdapter(strategyItem.related_stock)
+                adapter = TagAdapter(strategyItem.related_stockID)
             }
 
             cardView.setOnClickListener {
-                listener?.onCardViewClick(itemView, strategyItem, adapterPosition)
+                onclick(position)
             }
         }
     }

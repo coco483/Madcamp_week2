@@ -6,8 +6,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.madcamp_week2.BlockLayout.addTradePlanLayout
 import com.example.madcamp_week2.BlockLayout.boolBlockFunctionList
+import com.example.madcamp_week2.BlockLayout.setBoolBlock
+import com.example.madcamp_week2.BlockLayout.setTradeTypeBlock
 import com.example.madcamp_week2.BlockLayout.showRadioDialog
 import com.example.madcamp_week2.CodeBlock.ActionBlock
+import com.example.madcamp_week2.CodeBlock.TradePlanBlock
 import com.example.madcamp_week2.databinding.BlockActionBinding
 
 
@@ -29,15 +32,24 @@ class ActionBlockAdapter(
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+        val actionBlock = actionBlockList[position]
+        // set child layout if child blocks are already set
+        setBoolBlock(holder.binding.blockActionCondition, context, actionBlock.conditionBlock)
+        setTradeTypeBlock(holder.binding.blockActionTradePlan, context, actionBlock.tradePlanBlock)
+        // set child layout by user input
         holder.binding.blockActionCondition.setOnClickListener {
             showRadioDialog(context, "choose condition for trade", boolBlockFunctionList.keys.toList()) { i ->
-                actionBlockList[position].conditionBlock =
+                actionBlock.conditionBlock =
                     boolBlockFunctionList[i]?.let { it1 -> it1(holder.binding.blockActionCondition, context) }
             }
         }
         holder.binding.blockActionTradePlan.setOnClickListener {
-            actionBlockList[position].tradePlanBlock = addTradePlanLayout(holder.binding.blockActionTradePlan, context)
+
+            actionBlock.tradePlanBlock = TradePlanBlock()
+            actionBlock.tradePlanBlock?.let { it1 ->
+                addTradePlanLayout(holder.binding.blockActionTradePlan, context, it1)
             }
+        }
 
     }
 

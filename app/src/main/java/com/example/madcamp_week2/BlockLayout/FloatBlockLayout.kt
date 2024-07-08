@@ -4,14 +4,16 @@ import android.R
 import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.TextView
+import android.widget.Toast
 import com.example.madcamp_week2.CodeBlock.FloatBinaryOpBlock
 import com.example.madcamp_week2.CodeBlock.NumBlock
 import com.example.madcamp_week2.CodeBlock.StockPriceBlock
-import com.example.madcamp_week2.MyLanguage.CompareOperator
 import com.example.madcamp_week2.MyLanguage.FloatOperator
-import com.example.madcamp_week2.Stock
+import com.example.madcamp_week2.Class.Stock
 import com.example.madcamp_week2.StockDataHolder
 import com.example.madcamp_week2.databinding.BlockBinaryFloatBinding
 import com.example.madcamp_week2.databinding.BlockNumBinding
@@ -19,10 +21,9 @@ import com.example.madcamp_week2.databinding.BlockStockPriceBinding
 
 
 
-fun addNumBlock(parentLayout: ViewGroup, context: Context): NumBlock {
-    return addBlock(parentLayout, context, BlockNumBinding::inflate) { binding ->
-        val block = NumBlock()
-
+fun addNumBlock(parentLayout: ViewGroup, context: Context, block: NumBlock) {
+    return addBlock(parentLayout, context, BlockNumBinding::inflate, block) { binding ->
+        if(block.num != null) binding.numBlockNumET.setText(block.num.toString())
         binding.numBlockNumET.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {
                 block.num = s.toString().toFloat()
@@ -30,14 +31,13 @@ fun addNumBlock(parentLayout: ViewGroup, context: Context): NumBlock {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
         })
-        block
 
     }
 }
 
-fun addStockPriceBlock(parentLayout: ViewGroup, context: Context): StockPriceBlock {
-    return addBlock(parentLayout, context, BlockStockPriceBinding::inflate) { binding ->
-        val block = StockPriceBlock()
+fun addStockPriceBlock(parentLayout: ViewGroup, context: Context, block: StockPriceBlock) {
+    return addBlock(parentLayout, context, BlockStockPriceBinding::inflate, block) { binding ->
+        if (block.stockID != null) binding.blockStockPriceACTV.setText(block.stockID)
         val searchAdapter = StockDataHolder
             .stockList?.let { ArrayAdapter(context, R.layout.simple_list_item_1, it) }
         binding.blockStockPriceACTV.setAdapter(searchAdapter)
@@ -45,14 +45,14 @@ fun addStockPriceBlock(parentLayout: ViewGroup, context: Context): StockPriceBlo
             val selectedStock = adapterView.getItemAtPosition(i) as Stock
             block.stockID = selectedStock.id
         }
-        block
     }
 }
-fun addFloatBinaryOpBlock(parentLayout: ViewGroup, context: Context): FloatBinaryOpBlock {
-    return addBlock(parentLayout, context, BlockBinaryFloatBinding::inflate) { binding ->
-        val block = FloatBinaryOpBlock()
-        binding.blockBinaryFloatOperator.text = "+"
-        block.floatOperator = FloatOperator.ADD
+fun addFloatBinaryOpBlock(parentLayout: ViewGroup, context: Context, block: FloatBinaryOpBlock) {
+    return addBlock(parentLayout, context, BlockBinaryFloatBinding::inflate, block) { binding ->
+        setFloatBlock(binding.blockBinaryFloatLeftOp, context, block.leftOpBlock)
+        setFloatBlock(binding.blockBinaryFloatRightOp, context, block.rightOpBlock)
+        setFloatOperator(binding.blockBinaryFloatOperator, block)
+
         binding.blockBinaryFloatRightOp.setOnClickListener {
             showRadioDialog(context, "choose right operand", floatBlockFuntionList.keys.toList()) { i ->
                 block.rightOpBlock =
@@ -72,10 +72,22 @@ fun addFloatBinaryOpBlock(parentLayout: ViewGroup, context: Context): FloatBinar
             "/" to FloatOperator.DIV)
         binding.blockBinaryFloatOperator.setOnClickListener {
             showRadioDialog(context, "choose operator", floatOperatorMap.keys.toList()) { op ->
-                binding.blockBinaryFloatOperator.text = op
                 block.floatOperator = floatOperatorMap[op]
+                setFloatOperator(binding.blockBinaryFloatOperator, block)
             }
         }
-        block
+    }
+}
+
+fun setFloatOperator(parentLayout: TextView, block: FloatBinaryOpBlock){
+    parentLayout.text = when(block.floatOperator) {
+        FloatOperator.ADD -> "+"
+        FloatOperator.SUB -> "-"
+        FloatOperator.MUL -> "*"
+        FloatOperator.DIV -> "/"
+        null -> {
+            block.floatOperator = FloatOperator.ADD
+            "+"
+        }
     }
 }

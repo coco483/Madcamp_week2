@@ -36,9 +36,9 @@ sealed interface MyFloat {
 
     @Serializable
     data class MyFloatBinaryOp(
-        private val rightOperand: MyFloat,
-        private val leftOperand: MyFloat,
-        private val floatOperator: FloatOperator
+        val rightOperand: MyFloat,
+        val leftOperand: MyFloat,
+        val floatOperator: FloatOperator
     ) : MyFloat {
         override fun evaluate(stockPriceMap: Map<String, stockData>): Float =
             floatOperator.calculate(
@@ -59,7 +59,7 @@ sealed interface MyFloat {
 
     @Serializable
     data class MyNum(
-        private val num: Float
+        val num: Float
     ) : MyFloat {
         override fun evaluate(stockPriceMap: Map<String, stockData>): Float = num
     }

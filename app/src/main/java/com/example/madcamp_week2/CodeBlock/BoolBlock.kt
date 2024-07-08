@@ -33,6 +33,11 @@ class CompareBlock: BoolBlock() {
         }
         return null
     }
+    fun setAllChild(myCompare: MyBool.MyCompare) {
+        rightOpBlock = setAllChildOfFloat(myCompare.rightOperand)
+        leftOpBlock = setAllChildOfFloat(myCompare.leftOperand)
+        comparator = myCompare.comparator
+    }
 }
 
 class BoolBinaryOpBlock : BoolBlock(){
@@ -55,6 +60,11 @@ class BoolBinaryOpBlock : BoolBlock(){
         }
         return null
     }
+    fun setAllChild(myBoolBinaryOp: MyBool.MyBoolBinaryOp) {
+        rightOpBlock = setAllChildOfBool(myBoolBinaryOp.rightOperand)
+        leftOpBlock = setAllChildOfBool(myBoolBinaryOp.leftOperand)
+        boolOperator = myBoolBinaryOp.boolOperator
+    }
 }
 
 class NotBlock: BoolBlock(){
@@ -69,6 +79,9 @@ class NotBlock: BoolBlock(){
             }
         }
         return null
+    }
+    fun setAllChild(myNot: MyBool.MyNot) {
+        operandBlock = setAllChildOfBool(myNot.operand)
     }
 }
 

@@ -1,8 +1,13 @@
+import com.example.madcamp_week2.Class.User
+import com.example.madcamp_week2.MyLanguage.Strategy
+import com.example.madcamp_week2.strategyListToJson
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.gson.Gson
 
 object UserDataHolder {
     private var user: User? = null
     private val _favoriteList: MutableSet<String> = mutableSetOf()
+    private val _strategyList: MutableList<Strategy> = mutableListOf()
 //    private val _favoriteNameList: MutableSet<String> = mutableSetOf()
 
     fun setUser(account: GoogleSignInAccount?) {
@@ -11,7 +16,8 @@ object UserDataHolder {
                 id = account.id ?: "",
                 email = account.email,
                 displayName = account.displayName,
-                favorites = ""
+                favorites = "[]",
+                strategyList = "[]"
             )
         } else {
             null
@@ -19,7 +25,9 @@ object UserDataHolder {
     }
 
     fun getUser(): User? {
-        return user
+        val jsonFavoriteList = Gson().toJson(_favoriteList)
+        val jsonStrategyList = strategyListToJson(_strategyList)
+        return user?.let { User(user!!.id, user!!.email, user!!.displayName, jsonFavoriteList, jsonStrategyList) }
     }
 
     fun clearUser() {
@@ -28,6 +36,8 @@ object UserDataHolder {
 
     val favoriteList: List<String>
         get() = _favoriteList.toList()
+    val strategyList: MutableList<Strategy>
+        get() = _strategyList
 
 //    val favoriteNameList: List<String>
 //        get() = _favoriteNameList.toList()
@@ -38,6 +48,18 @@ object UserDataHolder {
 
     fun addAllFavorites(stockIds: List<String>) {
         _favoriteList.addAll(stockIds)
+    }
+
+    fun addStrategy(strategy: Strategy){
+        _strategyList.add(strategy)
+    }
+
+    fun addAllStrategy(strategyList: List<Strategy>){
+        _strategyList.addAll(strategyList)
+    }
+
+    fun updateStrategy(strategy: Strategy, pos: Int){
+        _strategyList[pos] = strategy
     }
 
 //    fun addFavoriteName(stockName: String) {

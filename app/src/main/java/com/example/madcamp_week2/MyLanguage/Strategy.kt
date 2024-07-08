@@ -1,14 +1,9 @@
 package com.example.madcamp_week2.MyLanguage
 
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
-import com.example.madcamp_week2.Stock
 import com.example.madcamp_week2.getHistoryData
-import com.example.madcamp_week2.getOneMonthBefore
 import com.example.madcamp_week2.parseHistoryData
 import com.example.madcamp_week2.stockData
-import com.google.gson.annotations.SerializedName
 import kotlinx.serialization.Serializable
 
 @Serializable

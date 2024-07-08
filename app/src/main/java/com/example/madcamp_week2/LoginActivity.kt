@@ -1,6 +1,6 @@
 package com.example.madcamp_week2
 
-import User
+import com.example.madcamp_week2.Class.User
 import UserDataHolder
 import android.content.Intent
 import android.os.Bundle
@@ -8,13 +8,10 @@ import android.util.Log
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInResult
-import com.google.android.gms.auth.api.signin.GoogleSignInStatusCodes
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.gson.Gson
@@ -26,7 +23,6 @@ import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.logging.Handler
 
 class LoginActivity : AppCompatActivity() {
 
@@ -82,7 +78,7 @@ class LoginActivity : AppCompatActivity() {
                 // 사용자가 이미 서버에 등록되어 있는지 확인 후 처리
                 checkUserOnServer(user)
             } else {
-                Log.e("handleSignInResult", "User data is null")
+                Log.e("handleSignInResult", "com.example.madcamp_week2.Class.User data is null")
                 Toast.makeText(this, "사용자 데이터를 가져올 수 없습니다.", Toast.LENGTH_SHORT).show()
             }
 
@@ -114,15 +110,20 @@ class LoginActivity : AppCompatActivity() {
                     serverUser?.favorites?.let { favoritesJson ->
                         val gson = Gson()
                         val type = object : TypeToken<List<String>>() {}.type
-                        val favoritesList: List<String> = gson.fromJson(favoritesJson, type)
+                        val favoritesList: List<String> = gson.fromJson(favoritesJson, type) ?: listOf()
                         UserDataHolder.addAllFavorites(favoritesList)
-                        Log.d("StockSearchFragment_inLogin", "Favorite list: ${UserDataHolder.favoriteList}")
+                        Log.d("Login", "Favorite list: ${UserDataHolder.favoriteList}")
                     }
-                    Log.d("checkUserOnServer", "User already exists on server: ${response.body()}")
+                    serverUser?.strategyList?.let { strategyJson ->
+                        val strategyList = jsonToStrategyList(strategyJson)
+                        UserDataHolder.addAllStrategy(strategyList)
+                        Log.d("Login", "Strategy list: ${UserDataHolder.strategyList}")
+                    }
+                    Log.d("checkUserOnServer", "com.example.madcamp_week2.Class.User already exists on server: ${response.body()}")
                     Toast.makeText(this@LoginActivity, "서버에 이미 등록된 사용자입니다.", Toast.LENGTH_SHORT).show()
                 } else {
                     // 등록되지 않은 사용자인 경우
-                    Log.d("checkUserOnServer", "User not found on server, sending user data...")
+                    Log.d("checkUserOnServer", "com.example.madcamp_week2.Class.User not found on server, sending user data...")
                     sendUserDataToServer(user)
                 }
             }

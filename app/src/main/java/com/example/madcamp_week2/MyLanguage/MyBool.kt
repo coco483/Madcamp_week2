@@ -36,9 +36,9 @@ sealed interface MyBool {
 
     @Serializable
     data class MyBoolBinaryOp(
-        private val rightOperand: MyBool,
-        private val leftOperand: MyBool,
-        private val boolOperator: BoolOperator
+        val rightOperand: MyBool,
+        val leftOperand: MyBool,
+        val boolOperator: BoolOperator
     ) : MyBool {
         override fun evaluate(stockPriceMap: Map<String, stockData>): Boolean =
             boolOperator.calculate(
@@ -49,7 +49,7 @@ sealed interface MyBool {
 
     @Serializable
     data class MyNot(
-        private val operand: MyBool,
+        val operand: MyBool,
     ) : MyBool {
         override fun evaluate(stockPriceMap: Map<String, stockData>): Boolean =
             !(operand.evaluate(stockPriceMap))
@@ -58,9 +58,9 @@ sealed interface MyBool {
 
     @Serializable
     data class MyCompare(
-        private val rightOperand: MyFloat,
-        private val leftOperand: MyFloat,
-        private val comparator: CompareOperator
+        val rightOperand: MyFloat,
+        val leftOperand: MyFloat,
+        val comparator: CompareOperator
     ) : MyBool {
         override fun evaluate(stockPriceMap: Map<String, stockData>): Boolean = comparator.compare(
             rightOperand.evaluate(stockPriceMap),
