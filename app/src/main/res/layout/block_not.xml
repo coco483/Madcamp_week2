@@ -6,7 +6,7 @@
     android:orientation="horizontal"
     android:gravity="center_vertical"
     android:background="#BBDEFB"
-    android:padding ="5dp">
+    android:padding ="3dp">
 
     <FrameLayout
         android:id="@+id/block_not_operand"
@@ -14,7 +14,6 @@
         android:layout_height="wrap_content"
         android:minHeight="30dp"
         android:minWidth="100dp"
-        android:background="#90CAF9"
-        android:padding ="10dp"/>
+        android:background="#90CAF9" />
 
 </LinearLayout>

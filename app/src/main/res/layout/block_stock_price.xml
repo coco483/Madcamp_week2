@@ -6,15 +6,16 @@
     android:orientation="horizontal"
     android:gravity="center_vertical"
     android:background="#BBDEFB"
-    android:padding ="5dp">
+    android:padding ="3dp">
 
     <AutoCompleteTextView
         android:id="@+id/block_stock_price_ACTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:minWidth="100dp"
+        android:gravity="center"
         android:text=""
-        android:hint="stock!"
+        android:hint="주식 종목"
         android:completionThreshold="1"
         android:inputType="text"
         android:textSize="20sp"/>

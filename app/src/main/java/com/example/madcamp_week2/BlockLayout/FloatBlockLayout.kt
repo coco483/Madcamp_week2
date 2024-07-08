@@ -51,6 +51,8 @@ fun addStockPriceBlock(parentLayout: ViewGroup, context: Context): StockPriceBlo
 fun addFloatBinaryOpBlock(parentLayout: ViewGroup, context: Context): FloatBinaryOpBlock {
     return addBlock(parentLayout, context, BlockBinaryFloatBinding::inflate) { binding ->
         val block = FloatBinaryOpBlock()
+        binding.blockBinaryFloatOperator.text = "+"
+        block.floatOperator = FloatOperator.ADD
         binding.blockBinaryFloatRightOp.setOnClickListener {
             showRadioDialog(context, "choose right operand", floatBlockFuntionList.keys.toList()) { i ->
                 block.rightOpBlock =
@@ -64,13 +66,14 @@ fun addFloatBinaryOpBlock(parentLayout: ViewGroup, context: Context): FloatBinar
             }
         }
         val floatOperatorMap = mapOf(
-            "add" to FloatOperator.ADD,
-            "sub" to FloatOperator.SUB,
-            "multiply" to FloatOperator.MUL,
-            "divide" to FloatOperator.DIV)
+            "+" to FloatOperator.ADD,
+            "-" to FloatOperator.SUB,
+            "*" to FloatOperator.MUL,
+            "/" to FloatOperator.DIV)
         binding.blockBinaryFloatOperator.setOnClickListener {
-            showRadioDialog(context, "choose operator", floatOperatorMap.keys.toList()) { i ->
-                block.floatOperator = floatOperatorMap[i]
+            showRadioDialog(context, "choose operator", floatOperatorMap.keys.toList()) { op ->
+                binding.blockBinaryFloatOperator.text = op
+                block.floatOperator = floatOperatorMap[op]
             }
         }
         block

@@ -30,8 +30,7 @@
             android:layout_height="wrap_content"
             android:minHeight="30dp"
             android:minWidth="100dp"
-            android:background="#FFEB3B"
-            android:padding ="5dp"/>
+            android:background="#FFEB3B" />
 
 
     </LinearLayout>
@@ -56,8 +55,7 @@
             android:layout_height="wrap_content"
             android:minHeight="30dp"
             android:minWidth="100dp"
-            android:background="#FFEB3B"
-            android:padding ="5dp"/>
+            android:background="#FFEB3B" />
 
 
     </LinearLayout>

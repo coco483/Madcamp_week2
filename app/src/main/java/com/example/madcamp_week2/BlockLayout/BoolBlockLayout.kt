@@ -20,6 +20,8 @@ import kotlin.contracts.contract
 fun addCompareBlock(parentLayout: ViewGroup, context: Context): CompareBlock {
     return addBlock(parentLayout, context, BlockBinaryBoolBinding::inflate) { binding ->
         val block = CompareBlock()
+        binding.blockBinaryBoolOperator.text = "<"
+        block.comparator = CompareOperator.GT
         binding.blockBinaryBoolRightOp.setOnClickListener {
             showRadioDialog(context, "choose right operand", floatBlockFuntionList.keys.toList()) { i ->
                 block.rightOpBlock =
@@ -38,8 +40,10 @@ fun addCompareBlock(parentLayout: ViewGroup, context: Context): CompareBlock {
             ">" to CompareOperator.LT,
             ">=" to CompareOperator.LTE)
         binding.blockBinaryBoolOperator.setOnClickListener {
-            showRadioDialog(context, "choose operator", compareOperatorMap.keys.toList()) { i ->
-                block.comparator = compareOperatorMap[i]
+
+            showRadioDialog(context, "choose operator", compareOperatorMap.keys.toList()) { op ->
+                binding.blockBinaryBoolOperator.text = op
+                block.comparator = compareOperatorMap[op]
             }
         }
         block
@@ -49,6 +53,8 @@ fun addCompareBlock(parentLayout: ViewGroup, context: Context): CompareBlock {
 fun addBoolBinaryOpBlock(parentLayout: ViewGroup, context: Context): BoolBinaryOpBlock {
     return addBlock(parentLayout, context, BlockBinaryBoolBinding::inflate) { binding ->
         val block = BoolBinaryOpBlock()
+        binding.blockBinaryBoolOperator.text = "and"
+        block.boolOperator = BoolOperator.AND
         binding.blockBinaryBoolRightOp.setOnClickListener {
             showRadioDialog(context, "choose right operand", boolBlockFunctionList.keys.toList()) { i ->
                 block.rightOpBlock =
@@ -65,8 +71,9 @@ fun addBoolBinaryOpBlock(parentLayout: ViewGroup, context: Context): BoolBinaryO
             "and" to BoolOperator.AND,
             "or" to BoolOperator.OR )
         binding.blockBinaryBoolOperator.setOnClickListener {
-            showRadioDialog(context, "choose operator", boolOperatorMap.keys.toList()) { i ->
-                block.boolOperator = boolOperatorMap[i]
+            showRadioDialog(context, "choose operator", boolOperatorMap.keys.toList()) { op ->
+                binding.blockBinaryBoolOperator.text = op
+                block.boolOperator = boolOperatorMap[op]
             }
         }
         block

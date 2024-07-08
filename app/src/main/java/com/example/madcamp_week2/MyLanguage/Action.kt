@@ -4,7 +4,7 @@ import android.util.Log
 import com.example.madcamp_week2.Stock
 import com.example.madcamp_week2.stockData
 
-class Action(
+data class Action(
     val condition: MyBool,
     val tradePlan: TradePlan,
     val involvedStockIdList: List<String>

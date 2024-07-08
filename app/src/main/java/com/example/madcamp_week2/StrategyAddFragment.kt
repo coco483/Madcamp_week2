@@ -9,11 +9,13 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.madcamp_week2.BlockLayout.addActionLayout
 import com.example.madcamp_week2.BlockLayout.addCompareBlock
 import com.example.madcamp_week2.CodeBlock.ActionBlock
 import com.example.madcamp_week2.MyLanguage.Action
 import com.example.madcamp_week2.MyLanguage.Strategy
+import com.example.madcamp_week2.databinding.BlockActionBinding
 import com.example.madcamp_week2.databinding.FragmentStrategyAddBinding
 import com.example.madcamp_week2.databinding.FragmetStockSearchBinding
 
@@ -31,9 +33,15 @@ class StrategyAddFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val recyclerView = binding.fragmentStrategyAddActionRV
+        val adapter = ActionBlockAdapter(actionBlockList, requireContext())
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        recyclerView.adapter = adapter
+
         binding.fragmentStrategyAddAddActionBTN.setOnClickListener {
-            val newActionBlock = addActionLayout(binding.fragmentStrategyAddAction, requireContext())
-            actionBlockList.add(newActionBlock)
+            val newActionBlock = ActionBlock()
+            //actionBlockList.add(newActionBlock)
+            adapter.addAction(newActionBlock)
         }
         binding.fragmentStrategyAddCalculateBTN.setOnClickListener {
             if (actionBlockList.isEmpty()) Toast.makeText(requireContext(), "no action!", Toast.LENGTH_SHORT).show()
@@ -48,7 +56,9 @@ class StrategyAddFragment: Fragment() {
                     } else return@setOnClickListener
                 }
                 val strategy = Strategy("title", relatedStockIdList, actionList)
-                val str = "수익률: ${strategy.calculate("20240101", "20240707", 10000000)}%"
+                val str = StrategyToJson(strategy)
+                //val str = "수익률: ${strategy.calculate("20240101", "20240707", 10000000)}%"
+
                 binding.textView2.text = str
             }
 

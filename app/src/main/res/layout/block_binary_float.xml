@@ -13,24 +13,26 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:minHeight="30dp"
-        android:minWidth="100dp"
-        android:background="#90CAF9"
-        android:padding ="10dp"/>
+        android:minWidth="50dp"
+        android:background="#90CAF9" />
 
-    <ImageButton
+    <TextView
         android:id="@+id/block_binaryFloat_operator"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:padding="5dp"
-        app:srcCompat="@drawable/baseline_arrow_forward_ios_24" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minWidth="50dp"
+        android:minHeight="50dp"
+        android:padding ="10dp"
+        android:gravity="center"
+        android:text="+"
+        android:textSize="30sp"/>
 
     <FrameLayout
         android:id="@+id/block_binaryFloat_rightOp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:minHeight="30dp"
-        android:minWidth="100dp"
-        android:background="#90CAF9"
-        android:padding ="10dp"/>
+        android:minWidth="50dp"
+        android:background="#90CAF9" />
 
 </LinearLayout>
