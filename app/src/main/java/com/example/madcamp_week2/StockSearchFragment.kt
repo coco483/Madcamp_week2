@@ -1,7 +1,6 @@
 package com.example.madcamp_week2
 
 import FavoriteAdapter
-import User
 import UserDataHolder
 import UserDataHolder.favoriteList
 import android.R
@@ -12,16 +11,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.madcamp_week2.Class.Stock
 import com.example.madcamp_week2.databinding.FragmetStockSearchBinding
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import okhttp3.ResponseBody
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class StockSearchFragment: Fragment() {
     private var _binding: FragmetStockSearchBinding? = null
@@ -66,6 +59,7 @@ class StockSearchFragment: Fragment() {
             }
         })
     }
+
 
     private fun openStockDetailFragment(stock: Stock) {
         val stockDetailFragment = StockDetailFragment().apply {

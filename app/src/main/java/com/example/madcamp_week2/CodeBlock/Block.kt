@@ -25,6 +25,11 @@ class TradePlanBlock {
         }
         return null
     }
+    fun setAllChild(tradePlan: TradePlan){
+        tradeType = tradePlan.tradeType
+        stockId = tradePlan.stockId
+        amountBlock = setAllChildOfFloat(tradePlan.amount)
+    }
 }
 class ActionBlock {
     var conditionBlock: BoolBlock? = null
@@ -42,5 +47,10 @@ class ActionBlock {
             }
         }
         return null
+    }
+    fun setAllChild(action:Action){
+        conditionBlock = setAllChildOfBool(action.condition)
+        tradePlanBlock = TradePlanBlock()
+        tradePlanBlock!!.setAllChild(action.tradePlan)
     }
 }

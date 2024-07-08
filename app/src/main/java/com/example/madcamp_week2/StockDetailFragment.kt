@@ -1,6 +1,5 @@
 package com.example.madcamp_week2
 
-import User
 import UserDataHolder
 import android.os.Bundle
 import android.util.Log
@@ -9,19 +8,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.example.madcamp_week2.Class.Stock
+import com.example.madcamp_week2.Class.User
 import com.example.madcamp_week2.databinding.FragmentStockDetailBinding
 import com.google.gson.Gson
 import com.jjoe64.graphview.DefaultLabelFormatter
 import com.jjoe64.graphview.GraphView
 import com.jjoe64.graphview.series.DataPoint
 import com.jjoe64.graphview.series.LineGraphSeries
-
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.text.SimpleDateFormat
-import java.util.Date
+
 
 class StockDetailFragment: Fragment() {
     private var _binding: FragmentStockDetailBinding? = null
@@ -50,7 +49,7 @@ class StockDetailFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        reloadGraph(binding.stockDetailGraphGV, 'D')
         binding.stockFavoriteBT.setOnClickListener {
             UserDataHolder.addFavorite(Stock(stockId, stockName, stockMarket))
 
@@ -61,72 +60,29 @@ class StockDetailFragment: Fragment() {
                 Toast.makeText(context, "User data is not available", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-
-            val userId = user.id
-            val userEmail = user.email
-            val userDisplayName = user.displayName
-
-            ApiClient.apiService.getUserById(userId).enqueue(object : Callback<User> {
-                override fun onResponse(call: Call<User>, response: Response<User>) {
+            // getUser gives user with updated Favorite List and Strategy List
+            ApiClient.apiService.updateUserData(user.id, user).enqueue(object : Callback<ResponseBody> {
+                override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                     if (response.isSuccessful) {
-                        val serverUser = response.body()
-                        Log.d("StockSearchFragment", "Fetched User ID: ${serverUser?.id}")
-                        if (serverUser?.id == userId) {
-                            // IDs match, update favorite list on the server
-                            val favoriteListJson = Gson().toJson(UserDataHolder.favoriteList)
-                            val updatedUser = user.copy(favorites = favoriteListJson)
-                            ApiClient.apiService.updateData(userId, updatedUser).enqueue(object : Callback<ResponseBody> {
-                                override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                                    if (response.isSuccessful) {
-                                        context?.let {
-                                            Toast.makeText(it, "Favorite list updated successfully", Toast.LENGTH_SHORT).show()
-                                        }
-                                    } else {
-                                        val errorMessage = "Failed to update favorite list: ${response.message()}"
-                                        context?.let {
-                                            Toast.makeText(it, errorMessage, Toast.LENGTH_SHORT).show()
-                                            Log.e("StockSearchFragment", errorMessage)
-                                        }
-                                    }
-                                }
-
-                                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                                    val error = "Error: ${t.message}"
-                                    context?.let {
-                                        Toast.makeText(it, error, Toast.LENGTH_SHORT).show()
-                                        Log.e("StockSearchFragment", error, t)
-                                    }
-                                }
-                            })
-                        } else {
-                            // Handle ID mismatch case
-                            context?.let {
-                                Toast.makeText(it, "User ID mismatch", Toast.LENGTH_SHORT).show()
-                            }
+                        context?.let {
+                            Toast.makeText(it, "added to favorite list", Toast.LENGTH_SHORT).show()
                         }
                     } else {
-                        // Handle error case for fetching user
-                        val errorMessage = "Failed to fetch user: ${response.message()}"
+                        val errorMessage = "Failed to update favorite list: ${response.message()}"
                         context?.let {
-                            Toast.makeText(it, errorMessage, Toast.LENGTH_SHORT).show()
-                            Log.e("StockSearchFragment", errorMessage)
+                            Log.e("StockDetailFragment", errorMessage)
                         }
                     }
                 }
-
-                override fun onFailure(call: Call<User>, t: Throwable) {
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                     val error = "Error: ${t.message}"
                     context?.let {
-                        Toast.makeText(it, error, Toast.LENGTH_SHORT).show()
-                        Log.e("StockSearchFragment", error, t)
+                        Log.e("StockDetailFragment", error, t)
                     }
                 }
             })
-        }
-
-        reloadGraph(binding.stockDetailGraphGV, 'D')
+            }
     }
-
 
     private fun reloadGraph(graph: GraphView, period: Char){
         var dailyStockJson = getHistoryData(stockId, "20160101", "20240706", period)

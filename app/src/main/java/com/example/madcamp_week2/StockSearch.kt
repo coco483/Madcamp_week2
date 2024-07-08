@@ -31,7 +31,7 @@ fun getHistoryData(stockCode: String, startDate: String, endDate: String, period
     val request = Request.Builder()
         .url(dailyPriceUrl)
         .addHeader("content-type", "application/json")
-        .addHeader("authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsImF1ZCI6ImNjNzRhMDUxLWUzMzMtNGJiNC05MTUwLTZiYmRiZmM1NTM2ZCIsInByZHRfY2QiOiIiLCJpc3MiOiJ1bm9ndyIsImV4cCI6MTcyMDQzOTQwMSwiaWF0IjoxNzIwMzUzMDAxLCJqdGkiOiJQU0NBTUNwUm5qSW81MkF0Y29veTNLU1REVkd4emx2TFhLTWcifQ.GpxnLq8UkiDIc7Vo1RmHqbVTU9S1M6T0uPdc8PwQB3ID9nJwNxhQ1azAlCjjeDqYmgP99LCdpPfXhZlXJNPokg")
+        .addHeader("authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsImF1ZCI6ImJmNTk2MjVhLWUwZGItNGVkMC1iZTk0LTI2N2I3M2YxNjQzZiIsInByZHRfY2QiOiIiLCJpc3MiOiJ1bm9ndyIsImV4cCI6MTcyMDUyNjM4OCwiaWF0IjoxNzIwNDM5OTg4LCJqdGkiOiJQU0NBTUNwUm5qSW81MkF0Y29veTNLU1REVkd4emx2TFhLTWcifQ.3KNRUIR8JYVlpJTobcS4MHaYURGX95fEp7F7SZPL9af4rZrILkO2uRtQ8xFaNwnbjzytefJKY0Tg7C5HK_Dq0Q")
         .addHeader("appkey", "PSCAMCpRnjIo52Atcooy3KSTDVGxzlvLXKMg")
         .addHeader("appsecret", "aJ4WQxVfByuf5WWoO5IeRFvphNJWBYJpq00zvobmtmx6w9n7CdxRj9mbK13S3F343wjI26kT3yvwcpozDPY5Hx3qH6ODmNuEUqoDbgGZ1seuwWSeT5X8bd/HkiqqN8kFlHVk1TlYkm1U5MXIqxAtnITJGSti7WEm9ggKTC3UY6zQDQ9oUAs=")
         .addHeader("tr_id", "FHKST03010100")

@@ -1,11 +1,10 @@
 package com.example.madcamp_week2
 
-import User
+import com.example.madcamp_week2.Class.User
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
-import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
@@ -21,7 +20,7 @@ interface APIServer {
     fun getUserById(@Path("id") id: String): Call<User>
 
     @PUT("users/{id}/")
-    fun updateData(
+    fun updateUserData(
         @Path("id") id: String,
         @Body user: User
     ): Call<ResponseBody>

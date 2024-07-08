@@ -7,7 +7,7 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.madcamp_week2.R
-import com.example.madcamp_week2.Stock
+import com.example.madcamp_week2.Class.Stock
 
 class FavoriteAdapter(private var itemList: List<Stock>) :
     RecyclerView.Adapter<FavoriteAdapter.Holder>() {

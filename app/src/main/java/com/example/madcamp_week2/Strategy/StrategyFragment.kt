@@ -1,6 +1,7 @@
 package com.example.madcamp_week2.Strategy
 
 import StrategyAdapter
+import UserDataHolder
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,6 +14,8 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.madcamp_week2.R
+import com.example.madcamp_week2.StockDetailFragment
+import com.example.madcamp_week2.StrategyAddFragment
 
 class StrategyFragment : Fragment() {
 
@@ -28,7 +31,6 @@ class StrategyFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_strategy, container, false)
 
         recyclerViewStrategy = view.findViewById(R.id.strategy_content_RV)
-        addButton = view.findViewById(R.id.add_item_button)
 
         return view
     }
@@ -38,20 +40,25 @@ class StrategyFragment : Fragment() {
 
         // RecyclerView 설정
         recyclerViewStrategy.layoutManager = LinearLayoutManager(requireContext())
-        strategyAdapter = StrategyAdapter(mutableListOf()) // 초기화면 빈 리스트로 시작
+        strategyAdapter = StrategyAdapter(UserDataHolder.strategyList, setStrategyAddFragment) // 초기화면 빈 리스트로 시작
         recyclerViewStrategy.adapter = strategyAdapter
 
         // RecyclerView에 Divider 추가
         val dividerItemDecoration = DividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL)
         recyclerViewStrategy.addItemDecoration(dividerItemDecoration) // divider 넣기
-
-
-        // 아이템 추가 버튼 클릭 시 동작 설정
-        addButton.setOnClickListener {
-            // 새로운 전략 아이템 추가 로직
-            val newStrategy = Strategy("새로운 전략", listOf("태그1", "태그2")) // 예시 데이터
-            strategyAdapter.addStrategyItem(newStrategy)
-            recyclerViewStrategy.smoothScrollToPosition(strategyAdapter.itemCount - 1)
-        }
     }
+
+    val setStrategyAddFragment = { position:Int ->
+        val strategyAddFragment = StrategyAddFragment().apply {
+            arguments = Bundle().apply {
+                putInt("STRATEGY_POS", position)
+            }
+        }
+        parentFragmentManager.beginTransaction()
+            .replace(com.example.madcamp_week2.R.id.blank_container, strategyAddFragment)
+            .addToBackStack(null)
+            .commit()
+    }
+
+
 }
