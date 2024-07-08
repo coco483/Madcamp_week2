@@ -8,14 +8,14 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.madcamp_week2.R
-import com.example.madcamp_week2.Strategy.StrategyList
+import com.example.madcamp_week2.Strategy.Strategy
 import com.example.madcamp_week2.Strategy.TagAdapter
 
-class StrategyAdapter(private var itemList: MutableList<StrategyList>) :
+class StrategyAdapter(private var itemList: MutableList<Strategy>) :
     RecyclerView.Adapter<StrategyAdapter.Holder>() {
 
     interface OnItemClickListener {
-        fun onCardViewClick(view: View, strategyItem: StrategyList, pos: Int)
+        fun onCardViewClick(view: View, strategyItem: Strategy, pos: Int)
     }
 
     private var listener: OnItemClickListener? = null
@@ -24,13 +24,13 @@ class StrategyAdapter(private var itemList: MutableList<StrategyList>) :
         this.listener = listener
     }
 
-    fun updateStrategyList(newStrategyList: List<StrategyList>) {
+    fun updateStrategyList(newStrategyList: List<Strategy>) {
         itemList.clear()
         itemList.addAll(newStrategyList)
         notifyDataSetChanged()
     }
 
-    fun addStrategyItem(strategyItem: StrategyList) {
+    fun addStrategyItem(strategyItem: Strategy) {
         itemList.add(strategyItem)
         notifyItemInserted(itemList.size - 1)
     }
@@ -57,7 +57,7 @@ class StrategyAdapter(private var itemList: MutableList<StrategyList>) :
         private val cardView: CardView = itemView.findViewById(R.id.strategylist_view_CV)
         private val itemNumber: TextView = itemView.findViewById(R.id.strategy_number_TV) // 순번을 표시할 TextView
 
-        fun bind(strategyItem: StrategyList, position: Int) {
+        fun bind(strategyItem: Strategy, position: Int) {
             strategyTitle.text = strategyItem.title
 
             // 순번 설정

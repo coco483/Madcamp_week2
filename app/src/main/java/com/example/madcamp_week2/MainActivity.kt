@@ -20,7 +20,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,6 +30,7 @@ class MainActivity : AppCompatActivity() {
         val tab1 = StockSearchFragment()
 
         supportFragmentManager.beginTransaction().replace(R.id.blank_container, tab1).commit()
+
         binding.bottomNavigation.setOnItemSelectedListener (
             object: NavigationBarView.OnItemSelectedListener {
                 override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
                     when(item.itemId) {
                         R.id.tab1 -> selectedFragment = StockSearchFragment()
                         R.id.tab2 -> selectedFragment = StockSearchFragment()
-                        R.id.tab3 -> selectedFragment = StockSearchFragment()
+                        R.id.tab3 -> selectedFragment = StrategyFragment()
                     }
                     selectedFragment?.let {
                         supportFragmentManager

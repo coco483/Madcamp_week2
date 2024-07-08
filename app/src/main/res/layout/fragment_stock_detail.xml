@@ -12,6 +12,13 @@
             android:id="@+id/stock_detail_graph_GV"
             android:layout_width="match_parent"
             android:layout_height="350dp" />
+
+        <Button
+            android:id="@+id/stock_favorite_BT"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="즐겨찾기 버튼" />
+
     </LinearLayout>
 
 </ScrollView>

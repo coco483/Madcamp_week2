@@ -1,11 +1,13 @@
 package com.example.madcamp_week2.Strategy
 
 import StrategyAdapter
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -47,7 +49,7 @@ class StrategyFragment : Fragment() {
         // 아이템 추가 버튼 클릭 시 동작 설정
         addButton.setOnClickListener {
             // 새로운 전략 아이템 추가 로직
-            val newStrategy = StrategyList("새로운 전략", listOf("태그1", "태그2")) // 예시 데이터
+            val newStrategy = Strategy("새로운 전략", listOf("태그1", "태그2")) // 예시 데이터
             strategyAdapter.addStrategyItem(newStrategy)
             recyclerViewStrategy.smoothScrollToPosition(strategyAdapter.itemCount - 1)
         }
