@@ -10,8 +10,6 @@ import com.example.madcamp_week2.CodeBlock.FloatBinaryOpBlock
 import com.example.madcamp_week2.CodeBlock.NotBlock
 import com.example.madcamp_week2.MyLanguage.BoolOperator
 import com.example.madcamp_week2.MyLanguage.CompareOperator
-import com.example.madcamp_week2.MyLanguage.FloatOperator
-import com.example.madcamp_week2.MyLanguage.MyBoolBinaryOp
 import com.example.madcamp_week2.databinding.BlockBinaryBoolBinding
 import com.example.madcamp_week2.databinding.BlockBinaryFloatBinding
 import com.example.madcamp_week2.databinding.BlockNotBinding

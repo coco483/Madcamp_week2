@@ -9,11 +9,13 @@ import com.example.madcamp_week2.getOneMonthBefore
 import com.example.madcamp_week2.parseHistoryData
 import com.example.madcamp_week2.stockData
 import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class Strategy (
-    @SerializedName("Title") val title: String,
-    @SerializedName("RelatedStockID") val related_stockID: List<String>,
-    @SerializedName("ActionList") val actionList: List<Action>,
+    val title: String,
+    val related_stockID: List<String>,
+    val actionList: List<Action>,
 ){
 
     fun calculate(startDate: String, endDate: String, initialCash:Int): Double{

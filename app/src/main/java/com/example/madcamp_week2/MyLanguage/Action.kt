@@ -3,7 +3,9 @@ package com.example.madcamp_week2.MyLanguage
 import android.util.Log
 import com.example.madcamp_week2.Stock
 import com.example.madcamp_week2.stockData
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class Action(
     val condition: MyBool,
     val tradePlan: TradePlan,
@@ -46,8 +48,8 @@ class TradeRequest(
     val stockId: String,
     val stockAmount: Float
 )
-
-class TradePlan (
+@Serializable
+data class TradePlan (
     val tradeType: TradeType,
     val stockId: String,
     val amount: MyFloat

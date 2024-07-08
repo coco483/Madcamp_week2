@@ -6,11 +6,7 @@ import com.example.madcamp_week2.MyLanguage.BoolOperator
 import com.example.madcamp_week2.MyLanguage.CompareOperator
 import com.example.madcamp_week2.MyLanguage.FloatOperator
 import com.example.madcamp_week2.MyLanguage.MyBool
-import com.example.madcamp_week2.MyLanguage.MyBoolBinaryOp
-import com.example.madcamp_week2.MyLanguage.MyCompare
 import com.example.madcamp_week2.MyLanguage.MyFloat
-import com.example.madcamp_week2.MyLanguage.MyFloatBinaryOp
-import com.example.madcamp_week2.MyLanguage.MyNot
 import com.example.madcamp_week2.MyLanguage.TradePlan
 
 abstract class BoolBlock {
@@ -32,7 +28,7 @@ class CompareBlock: BoolBlock() {
             val (rightOperand, list1) = rightOpBlock!!.getMyFloat(context) ?: Pair(null, listOf())
             val (leftOperand, list2) = leftOpBlock!!.getMyFloat(context) ?: Pair(null, listOf())
             if (rightOperand != null && leftOperand != null) {
-                return Pair(MyCompare(rightOperand, leftOperand, comparator!!), (list1+list2))
+                return Pair(MyBool.MyCompare(rightOperand, leftOperand, comparator!!), (list1+list2))
             }
         }
         return null
@@ -54,7 +50,7 @@ class BoolBinaryOpBlock : BoolBlock(){
             val (rightOperand, list1) = rightOpBlock!!.getMyBool(context) ?: Pair(null, listOf())
             val (leftOperand, list2) = leftOpBlock!!.getMyBool(context) ?: Pair(null, listOf())
             if (rightOperand != null && leftOperand != null && boolOperator != null) {
-                return Pair(MyBoolBinaryOp(rightOperand, leftOperand, boolOperator!!), (list1+list2))
+                return Pair(MyBool.MyBoolBinaryOp(rightOperand, leftOperand, boolOperator!!), (list1+list2))
             }
         }
         return null
@@ -69,7 +65,7 @@ class NotBlock: BoolBlock(){
         } else {
             val (operand, list) = operandBlock!!.getMyBool(context) ?: Pair(null, listOf())
             if(operand != null) {
-                return Pair(MyNot(operand), list)
+                return Pair(MyBool.MyNot(operand), list)
             }
         }
         return null

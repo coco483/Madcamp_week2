@@ -10,16 +10,7 @@ import com.jjoe64.graphview.DefaultLabelFormatter
 import com.jjoe64.graphview.GraphView
 import com.jjoe64.graphview.series.DataPoint
 import com.jjoe64.graphview.series.LineGraphSeries
-import com.example.madcamp_week2.MyLanguage.Action
-import com.example.madcamp_week2.MyLanguage.CompareOperator
-import com.example.madcamp_week2.MyLanguage.MyBool
-import com.example.madcamp_week2.MyLanguage.MyCompare
-import com.example.madcamp_week2.MyLanguage.MyNum
-import com.example.madcamp_week2.MyLanguage.TradePlan
-import com.example.madcamp_week2.MyLanguage.TradeType
-import com.example.madcamp_week2.MyLanguage.MyNot
-import com.example.madcamp_week2.MyLanguage.MyStockPrice
-import com.example.madcamp_week2.MyLanguage.Strategy
+
 
 class StockDetailFragment: Fragment() {
     private var _binding: FragmentStockDetailBinding? = null
@@ -47,18 +38,6 @@ class StockDetailFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         reloadGraph(binding.stockDetailGraphGV, 'D')
-
-
-        // This is for testing
-        val comparator = CompareOperator.LT
-        var condition: MyBool = MyCompare(MyNum(80000f), MyStockPrice("005930"), comparator)
-        condition = MyNot(condition)
-        val tradePlan = TradePlan(  TradeType.BUY,"005930", MyStockPrice("005930") )
-        val involvedStockId: List<String> = listOf("005930")
-        val action = Action(condition, tradePlan, involvedStockId)
-        val strategy = Strategy("myStrategy", listOf("005930"), listOf(action))
-
-        binding.textView.text = strategy.calculate("20240607", "20240706", 1000000).toString()
     }
 
     private fun reloadGraph(graph: GraphView, period: Char){

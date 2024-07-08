@@ -56,8 +56,12 @@ class StrategyAddFragment: Fragment() {
                     } else return@setOnClickListener
                 }
                 val strategy = Strategy("title", relatedStockIdList, actionList)
-                val str = StrategyToJson(strategy)
-                //val str = "수익률: ${strategy.calculate("20240101", "20240707", 10000000)}%"
+                var str = StrategyToJson(strategy)
+                Log.d("StockAdd", "json: $str")
+                val newStrategy = JsonToStrategy(str)
+                Log.d("StockAdd", "strategy: $newStrategy")
+                Log.d("StockAdd", "back to json: ${StrategyToJson(newStrategy)}")
+                str += "수익률: ${strategy.calculate("20240101", "20240707", 10000000)}%"
 
                 binding.textView2.text = str
             }
