@@ -50,6 +50,8 @@ class StockSearchFragment: Fragment() {
 
         // Fetch user from server and compare IDs
         val userId = UserDataHolder.getUser()?.id ?: return
+        val userEmail = UserDataHolder.getUser()?.email ?: return
+        val userDisplayName = UserDataHolder.getUser()?.displayName ?: return
 
         ApiClient.apiService.getUserById(userId).enqueue(object : Callback<User> {
             override fun onResponse(call: Call<User>, response: Response<User>) {
@@ -59,17 +61,21 @@ class StockSearchFragment: Fragment() {
                     if (serverUser?.id == userId) {
                         // IDs match, update favorite list on the server
                         val favoriteListJson = Gson().toJson(favoriteList)
-                        val updatedUser = User(serverUser.id, serverUser.name, favoriteListJson) // Update user with new favoriteList
-
-                        ApiClient.apiService.updateUser(userId, updatedUser).enqueue(object : Callback<User> {
-                            override fun onResponse(call: Call<User>, response: Response<User>) {
+                        val Change = User(
+                            id = userId,
+                            email = userEmail,
+                            displayName = userDisplayName,
+                            favorites = favoriteListJson
+                        )
+                        ApiClient.apiService.updateName(userId, Change).enqueue(object : Callback<ResponseBody> {
+                            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                                 if (response.isSuccessful) {
                                     // Ensure the context is not null
                                     context?.let {
-                                        Toast.makeText(it, "User updated successfully", Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(it, "Favorite list updated successfully", Toast.LENGTH_SHORT).show()
                                     }
                                 } else {
-                                    val errorMessage = "Failed to update user: ${response.message()}"
+                                    val errorMessage = "Failed to update favorite list: ${response.message()}"
                                     context?.let {
                                         Toast.makeText(it, errorMessage, Toast.LENGTH_SHORT).show()
                                         Log.e("StockSearchFragment", errorMessage)
@@ -77,7 +83,7 @@ class StockSearchFragment: Fragment() {
                                 }
                             }
 
-                            override fun onFailure(call: Call<User>, t: Throwable) {
+                            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                                 val error = "Error: ${t.message}"
                                 context?.let {
                                     Toast.makeText(it, error, Toast.LENGTH_SHORT).show()
