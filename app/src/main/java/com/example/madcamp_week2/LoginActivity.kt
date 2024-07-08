@@ -113,8 +113,8 @@ class LoginActivity : AppCompatActivity() {
                     val serverUser = response.body()
                     serverUser?.favorites?.let { favoritesJson ->
                         val gson = Gson()
-                        val type = object : TypeToken<List<String>>() {}.type
-                        val favoritesList: List<String> = gson.fromJson(favoritesJson, type)
+                        val type = object : TypeToken<List<Stock>>() {}.type
+                        val favoritesList: List<Stock> = gson.fromJson(favoritesJson, type) ?: emptyList()
                         UserDataHolder.addAllFavorites(favoritesList)
                         Log.d("StockSearchFragment_inLogin", "Favorite list: ${UserDataHolder.favoriteList}")
                     }

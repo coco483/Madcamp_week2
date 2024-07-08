@@ -30,12 +30,14 @@ class StockDetailFragment: Fragment() {
 
     private lateinit var stockId: String
     private lateinit var stockName:String
+    private lateinit var stockMarket:String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             stockId = it.getString("STOCK_ID").toString()
             stockName = it.getString("STOCK_NAME").toString()
+            stockMarket = it.getString("STOCK_MARKET").toString()
         }
     }
     override fun onCreateView(
@@ -50,7 +52,8 @@ class StockDetailFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.stockFavoriteBT.setOnClickListener {
-            UserDataHolder.addFavorite(stockId)
+            UserDataHolder.addFavorite(Stock(stockId, stockName, stockMarket))
+
 
             // Fetch user from server and compare IDs
             val user = UserDataHolder.getUser()

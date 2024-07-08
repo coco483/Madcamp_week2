@@ -3,6 +3,7 @@ package com.example.madcamp_week2
 import FavoriteAdapter
 import User
 import UserDataHolder
+import UserDataHolder.favoriteList
 import android.R
 import android.app.AlertDialog
 import android.os.Bundle
@@ -46,8 +47,12 @@ class StockSearchFragment: Fragment() {
         }
 
         // Get favorite list from FavoriteHolder
-        val favoriteList = UserDataHolder.favoriteList
-        Log.d("StockSearchFragment", "Favorite list: $favoriteList")
+//        val favoriteList = UserDataHolder.favoriteList
+        val favoriteNameList = UserDataHolder.favoriteList.mapNotNull { stock ->
+            stock.name
+        }
+
+        Log.d("StockSearchFragment", "Favorite list: $favoriteNameList")
 
         // Create adapter and set it to RecyclerView
         val adapter = FavoriteAdapter(favoriteList)
@@ -55,31 +60,11 @@ class StockSearchFragment: Fragment() {
         binding.stockSearchFavoriteRV.adapter = adapter
 
         adapter.setOnItemClickListener(object : FavoriteAdapter.OnItemClickListener {
-            override fun onCardViewClick(view: View, favoriteItem: String, pos: Int) {
-                showDialog(favoriteItem)
+            override fun onCardViewClick(view: View, stock: Stock, pos: Int) {
+                // Handle click event as needed
+                openStockDetailFragment(stock)
             }
         })
-    }
-
-    fun showDialog(stockId: String) {
-        val stock = StockDataHolder.stockList?.find { it.id == stockId }
-
-        if (stock != null) {
-            val stockName = stock.name
-            val dialogBuilder = AlertDialog.Builder(requireContext())
-
-            dialogBuilder.setTitle("즐겨찾기 상세 정보")
-            dialogBuilder.setMessage("주식 ID: $stockId\n주식 이름: $stockName")
-            dialogBuilder.setPositiveButton("확인") { dialog, _ ->
-                // 확인 버튼 클릭 시 처리할 로직 (예: 다이얼로그 닫기)
-                dialog.dismiss()
-            }
-
-            val dialog = dialogBuilder.create()
-            dialog.show()
-        } else {
-            // 주식 객체를 찾을 수 없는 경우에 대한 처리
-        }
     }
 
     private fun openStockDetailFragment(stock: Stock) {
@@ -87,6 +72,7 @@ class StockSearchFragment: Fragment() {
             arguments = Bundle().apply {
                 putString("STOCK_ID", stock.id)
                 putString("STOCK_NAME", stock.name)
+                putString("STOCK_MARKET", stock.market)
             }
         }
         parentFragmentManager.beginTransaction()

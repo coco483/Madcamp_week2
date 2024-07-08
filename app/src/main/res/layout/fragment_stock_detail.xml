@@ -1,24 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
         <com.jjoe64.graphview.GraphView
             android:id="@+id/stock_detail_graph_GV"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="200dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
             android:layout_width="match_parent"
-            android:layout_height="350dp" />
+            android:layout_height="350dp"
+            android:background="@drawable/graph"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/stock_favorite_BT"
+            android:elevation="10dp" />
 
         <Button
             android:id="@+id/stock_favorite_BT"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="즐겨찾기 버튼" />
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:layout_width="290dp"
+            android:layout_height="40dp"
+            android:background="@drawable/button1"
+            android:fontFamily="@font/pretendard1"
+            android:text="즐겨찾기"
+            android:textColor="#FFFFFF"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent" />
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </ScrollView>
