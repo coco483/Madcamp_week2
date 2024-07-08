@@ -7,6 +7,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 
 interface APIServer {
@@ -19,17 +20,12 @@ interface APIServer {
     @GET("users/{id}")
     fun getUserById(@Path("id") id: String): Call<User>
 
-    @POST("users/{id}/favorites")
-    fun updateFavoriteList(
-        @Path("id") id: String,
-        @Body favorites: String
-    ): Call<ResponseBody>
-
-    @POST("users/{id}")
-    fun updateUser(
+    @PUT("users/{id}/")
+    fun updateData(
         @Path("id") id: String,
         @Body user: User
-    ): Call<User>
+    ): Call<ResponseBody>
+    // 업데이트 하기 위해서 Body를 모두 업데이트 해야 한다.
 }
 
 // server가 client한테 보내는 것

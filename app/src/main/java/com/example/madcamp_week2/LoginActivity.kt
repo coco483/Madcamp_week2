@@ -17,9 +17,16 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult
 import com.google.android.gms.auth.api.signin.GoogleSignInStatusCodes
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.logging.Handler
 
 class LoginActivity : AppCompatActivity() {
 
@@ -68,11 +75,12 @@ class LoginActivity : AppCompatActivity() {
             // 구글 로그인 성공 처리
             Toast.makeText(this, "구글 로그인 성공: ${account?.displayName}", Toast.LENGTH_SHORT).show()
 
-            // 사용자 정보 서버에 전송
+            // 사용자 정보 구글 서버에서 받아서 서버에 전송
             UserDataHolder.setUser(account)
             val user = UserDataHolder.getUser()
             if (user != null) {
-                sendUserDataToServer(user)
+                // 사용자가 이미 서버에 등록되어 있는지 확인 후 처리
+                checkUserOnServer(user)
             } else {
                 Log.e("handleSignInResult", "User data is null")
                 Toast.makeText(this, "사용자 데이터를 가져올 수 없습니다.", Toast.LENGTH_SHORT).show()
@@ -81,8 +89,13 @@ class LoginActivity : AppCompatActivity() {
             // MainActivity로 이동
             val intent = Intent(this, MainActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            startActivity(intent)
-            finish() // LoginActivity 종료
+
+            // 500ms 후에 실행
+            CoroutineScope(Dispatchers.Main).launch {
+                delay(300)
+                startActivity(intent)
+                finish() // LoginActivity 종료
+            }
 
         } catch (e: ApiException) {
             // 구글 로그인 실패 처리
@@ -91,26 +104,56 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    private fun checkUserOnServer(user: User) {
+        // 서버에서 사용자 정보 확인
+        ApiClient.apiService.getUserById(user.id).enqueue(object : Callback<User> {
+            override fun onResponse(call: Call<User>, response: Response<User>) {
+                if (response.isSuccessful) {
+                    // 이미 등록된 사용자인 경우
+                    val serverUser = response.body()
+                    serverUser?.favorites?.let { favoritesJson ->
+                        val gson = Gson()
+                        val type = object : TypeToken<List<String>>() {}.type
+                        val favoritesList: List<String> = gson.fromJson(favoritesJson, type)
+                        UserDataHolder.addAllFavorites(favoritesList)
+                        Log.d("StockSearchFragment_inLogin", "Favorite list: ${UserDataHolder.favoriteList}")
+                    }
+                    Log.d("checkUserOnServer", "User already exists on server: ${response.body()}")
+                    Toast.makeText(this@LoginActivity, "서버에 이미 등록된 사용자입니다.", Toast.LENGTH_SHORT).show()
+                } else {
+                    // 등록되지 않은 사용자인 경우
+                    Log.d("checkUserOnServer", "User not found on server, sending user data...")
+                    sendUserDataToServer(user)
+                }
+            }
+
+            override fun onFailure(call: Call<User>, t: Throwable) {
+                // 서버 요청 실패 처리
+                Log.e("checkUserOnServer", "Failed to check user on server: ${t.message}")
+                Toast.makeText(this@LoginActivity, "서버 사용자 확인 실패: ${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
     private fun sendUserDataToServer(user: User) {
-        Log.d("NetworkRequest", "Sending user data to server: $user") // 추가
+        Log.d("sendUserDataToServer", "Sending user data to server: $user")
 
         val call = ApiClient.apiService.createUser(user)
         call.enqueue(object : Callback<User> {
             override fun onResponse(call: Call<User>, response: Response<User>) {
                 if (response.isSuccessful) {
-                    Log.d("NetworkRequest", "서버에 사용자 정보 저장 성공: ${response.body()}")
+                    Log.d("sendUserDataToServer", "서버에 사용자 정보 저장 성공: ${response.body()}")
                     Toast.makeText(this@LoginActivity, "서버에 사용자 정보 저장 성공", Toast.LENGTH_SHORT).show()
                 } else {
-                    Log.d("NetworkRequest", "fail to save: ${response.code()}")
+                    Log.d("sendUserDataToServer", "fail to save: ${response.code()}")
                     Toast.makeText(this@LoginActivity, "서버에 사용자 정보 저장 실패: ${response.code()}", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<User>, t: Throwable) {
-                Log.e("NetworkRequest", "fail to request: ${t.message}")
+                Log.e("sendUserDataToServer", "fail to request: ${t.message}")
                 Toast.makeText(this@LoginActivity, "서버 요청 실패: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
     }
-
 }
