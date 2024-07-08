@@ -37,6 +37,12 @@ class StockDetailFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.stockFavoriteBT.setOnClickListener {
+            FavoriteHolder.addFavorite(stockId)
+
+        }
+
         reloadGraph(binding.stockDetailGraphGV, 'D')
     }
 

@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.example.madcamp_week2.Strategy.StrategyFragment
 import com.example.madcamp_week2.databinding.ActivityMainBinding
 import com.google.android.material.navigation.NavigationBarView
 import com.jjoe64.graphview.DefaultLabelFormatter
@@ -18,7 +19,6 @@ import com.jjoe64.graphview.series.LineGraphSeries
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -30,6 +30,7 @@ class MainActivity : AppCompatActivity() {
         val tab1 = StockSearchFragment()
 
         supportFragmentManager.beginTransaction().replace(R.id.blank_container, tab1).commit()
+
         binding.bottomNavigation.setOnItemSelectedListener (
             object: NavigationBarView.OnItemSelectedListener {
                 override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -37,7 +38,7 @@ class MainActivity : AppCompatActivity() {
                     when(item.itemId) {
                         R.id.tab1 -> selectedFragment = StockSearchFragment()
                         R.id.tab2 -> selectedFragment = StrategyAddFragment()
-                        R.id.tab3 -> selectedFragment = StockSearchFragment()
+                        R.id.tab3 -> selectedFragment = StrategyFragment()
                     }
                     selectedFragment?.let {
                         supportFragmentManager

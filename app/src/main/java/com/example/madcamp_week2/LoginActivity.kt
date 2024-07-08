@@ -1,13 +1,13 @@
 package com.example.madcamp_week2
 
 import User
+import UserDataHolder
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.madcamp_week2.Strategy.StrategyFragment
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -69,12 +69,14 @@ class LoginActivity : AppCompatActivity() {
             Toast.makeText(this, "구글 로그인 성공: ${account?.displayName}", Toast.LENGTH_SHORT).show()
 
             // 사용자 정보 서버에 전송
-            val user = User(
-                id = account?.id ?: "",
-                email = account?.email,
-                displayName = account?.displayName
-            )
-            sendUserDataToServer(user)
+            UserDataHolder.setUser(account)
+            val user = UserDataHolder.getUser()
+            if (user != null) {
+                sendUserDataToServer(user)
+            } else {
+                Log.e("handleSignInResult", "User data is null")
+                Toast.makeText(this, "사용자 데이터를 가져올 수 없습니다.", Toast.LENGTH_SHORT).show()
+            }
 
             // MainActivity로 이동
             val intent = Intent(this, MainActivity::class.java)
