@@ -2,6 +2,7 @@ package com.example.madcamp_week2
 
 import FavoriteAdapter
 import User
+import UserDataHolder
 import android.R
 import android.app.AlertDialog
 import android.os.Bundle
@@ -15,6 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.madcamp_week2.databinding.FragmetStockSearchBinding
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
@@ -42,83 +44,14 @@ class StockSearchFragment: Fragment() {
             val selectedStock = adapterView.getItemAtPosition(i) as Stock
             openStockDetailFragment(selectedStock)
         }
-        // Initialize RecyclerView with LinearLayoutManager
-        binding.stockSearchFavoriteRV.layoutManager = LinearLayoutManager(requireContext())
 
         // Get favorite list from FavoriteHolder
-        val favoriteList = FavoriteHolder.favoriteList
-
-        // Fetch user from server and compare IDs
-        val userId = UserDataHolder.getUser()?.id ?: return
-        val userEmail = UserDataHolder.getUser()?.email ?: return
-        val userDisplayName = UserDataHolder.getUser()?.displayName ?: return
-
-        ApiClient.apiService.getUserById(userId).enqueue(object : Callback<User> {
-            override fun onResponse(call: Call<User>, response: Response<User>) {
-                if (response.isSuccessful) {
-                    val serverUser = response.body()
-                    Log.d("StockSearchFragment", "Fetched User ID: ${serverUser?.id}")
-                    if (serverUser?.id == userId) {
-                        // IDs match, update favorite list on the server
-                        val favoriteListJson = Gson().toJson(favoriteList)
-                        val Change = User(
-                            id = userId,
-                            email = userEmail,
-                            displayName = userDisplayName,
-                            favorites = favoriteListJson
-                        )
-                        ApiClient.apiService.updateName(userId, Change).enqueue(object : Callback<ResponseBody> {
-                            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                                if (response.isSuccessful) {
-                                    // Ensure the context is not null
-                                    context?.let {
-                                        Toast.makeText(it, "Favorite list updated successfully", Toast.LENGTH_SHORT).show()
-                                    }
-                                } else {
-                                    val errorMessage = "Failed to update favorite list: ${response.message()}"
-                                    context?.let {
-                                        Toast.makeText(it, errorMessage, Toast.LENGTH_SHORT).show()
-                                        Log.e("StockSearchFragment", errorMessage)
-                                    }
-                                }
-                            }
-
-                            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                                val error = "Error: ${t.message}"
-                                context?.let {
-                                    Toast.makeText(it, error, Toast.LENGTH_SHORT).show()
-                                    Log.e("StockSearchFragment", error, t)
-                                }
-                            }
-                        })
-                    } else {
-                        // Handle ID mismatch case
-                        context?.let {
-                            Toast.makeText(it, "User ID mismatch", Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                } else {
-                    // Handle error case for fetching user
-                    val errorMessage = "Failed to fetch user: ${response.message()}"
-                    context?.let {
-                        Toast.makeText(it, errorMessage, Toast.LENGTH_SHORT).show()
-                        Log.e("StockSearchFragment", errorMessage)
-                    }
-                }
-            }
-
-            override fun onFailure(call: Call<User>, t: Throwable) {
-                val error = "Error: ${t.message}"
-                context?.let {
-                    Toast.makeText(it, error, Toast.LENGTH_SHORT).show()
-                    Log.e("StockSearchFragment", error, t)
-                }
-            }
-        })
-
+        val favoriteList = UserDataHolder.favoriteList
+        Log.d("StockSearchFragment", "Favorite list: $favoriteList")
 
         // Create adapter and set it to RecyclerView
         val adapter = FavoriteAdapter(favoriteList)
+        binding.stockSearchFavoriteRV.layoutManager = LinearLayoutManager(requireContext())
         binding.stockSearchFavoriteRV.adapter = adapter
 
         adapter.setOnItemClickListener(object : FavoriteAdapter.OnItemClickListener {
