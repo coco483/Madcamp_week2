@@ -42,8 +42,8 @@ sealed interface MyBool {
     ) : MyBool {
         override fun evaluate(stockPriceMap: Map<String, stockData>): Boolean =
             boolOperator.calculate(
-                rightOperand.evaluate(stockPriceMap),
-                leftOperand.evaluate(stockPriceMap)
+                leftOperand.evaluate(stockPriceMap),
+                rightOperand.evaluate(stockPriceMap)
             )
     }
 
@@ -63,8 +63,8 @@ sealed interface MyBool {
         val comparator: CompareOperator
     ) : MyBool {
         override fun evaluate(stockPriceMap: Map<String, stockData>): Boolean = comparator.compare(
-            rightOperand.evaluate(stockPriceMap),
-            leftOperand.evaluate(stockPriceMap)
+            leftOperand.evaluate(stockPriceMap),
+            rightOperand.evaluate(stockPriceMap)
         )
     }
 

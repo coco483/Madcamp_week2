@@ -31,6 +31,7 @@ data class Action(
         // collect all possible tradeRequest
         val tradeRequestList: MutableList<TradeRequest> = mutableListOf()
         for ((date,stockPriceMap) in dateToStockDataMap){
+            Log.d("Action", "condition: $condition, result: ${condition.evaluate(stockPriceMap)}")
             if (condition.evaluate(stockPriceMap)) {
                 val request = tradePlan.makeTradeRequest(date, stockPriceMap)
                 tradeRequestList.add(request)
