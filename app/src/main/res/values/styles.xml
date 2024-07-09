@@ -1,0 +1,7 @@
+<resources>
+    <style name="NoShadowBottomNavigationView" parent="Widget.Design.BottomNavigationView">
+        <item name="elevation">0dp</item>
+        <item name="itemHorizontalTranslationEnabled">false</item>
+        <item name="itemIconTint">@drawable/selector</item> <!-- 아이콘 색상 상태 목록 적용 -->
+    </style>
+</resources>

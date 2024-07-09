@@ -8,39 +8,44 @@
     tools:context=".MainActivity"
     android:background="#FFFFFF">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="45dp"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="#FFFFFF">
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/blank_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="45dp"
-            app:layout_constraintBottom_toTopOf="parent"
+            android:layout_height="0dp"
+            android:elevation="0dp"
+            android:background="@color/white"
+            app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
             app:layout_constraintTop_toTopOf="parent"
-            android:background="#FFFFFF">
+            app:layout_constraintVertical_bias="1.0"
+            tools:layout_editor_absoluteX="-72dp" />
 
-            <androidx.fragment.app.FragmentContainerView
-                android:id="@+id/blank_container"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:elevation="0dp"
-                android:background="@color/white"
-                app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="1.0"
-                tools:layout_editor_absoluteX="-72dp" />
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottom_navigation"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_gravity="bottom"
+            android:background="#FFFFFF"
+            android:elevation="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:menu="@menu/menu_bottom_nav"
+            app:itemRippleColor="@null"
+            app:backgroundTint="#FFFFFF"
+            app:labelVisibilityMode="unlabeled"
+            app:itemBackground="@null"
+            style="@style/NoShadowBottomNavigationView" />
 
-            <com.google.android.material.bottomnavigation.BottomNavigationView
-                    android:layout_width="match_parent"
-                    android:layout_height="70dp"
-                    android:id="@+id/bottom_navigation"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:menu="@menu/menu_bottom_nav"
-                    android:layout_gravity="bottom"
-                    android:background="#FFFFFF"
-                    app:itemRippleColor="@null"
-                    app:backgroundTint="#FFFFFF"
-                    android:elevation="0dp"
-                    />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>
