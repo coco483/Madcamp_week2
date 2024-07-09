@@ -1,19 +1,43 @@
 package com.example.madcamp_week2
 
 import android.app.VoiceInteractor
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.lang.Thread.sleep
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 data class Outputs(val output1: Output1, val output2: List<stockData>)
 data class Output1(val hts_kor_isnm: String)
 data class stockData(val stck_bsop_date: String, val stck_clpr: Double)
 
-fun getHistoryData(stockCode: String, startDate: String, endDate: String, period: Char): String? {
-    Log.d("ApiRequest", "stockCode: $stockCode")
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun getHistoryData(stockCode: String, startDate: String, endDate: String, period: Char): List<stockData> {
+    val startDateAsInt = startDate.toInt()
+    val dataList:MutableList<stockData> = mutableListOf()
+    var nextEndDate = endDate
+    while(startDateAsInt <= nextEndDate.toInt()){
+        val jsonStr = requestStockData(stockCode, startDate, nextEndDate, period)
+        val outputs = jsonStr?.let { parseHistoryData(it) }
+        if (outputs == null) {
+            return dataList
+        } else if (outputs.first().stck_clpr == 0.0) return dataList
+        dataList.addAll(outputs.filter { it.stck_clpr != 0.0 })
+        Log.d("GetHistoryData", "start: $startDateAsInt, end: $nextEndDate, $outputs")
+        nextEndDate = getDayEarlier(outputs.last().stck_bsop_date)
+
+    }
+    return dataList
+}
+
+fun requestStockData(stockCode: String, startDate: String, endDate: String, period: Char): String? {
+    Log.d("ApiRequest", "stockCode: $stockCode, startDate: $startDate, endDate: $endDate")
     if ( period !in listOf('D', 'W', 'M', 'Y')) {
         Log.d("StockSearch", "$period is not a valid input")
         return null
@@ -31,7 +55,7 @@ fun getHistoryData(stockCode: String, startDate: String, endDate: String, period
     val request = Request.Builder()
         .url(dailyPriceUrl)
         .addHeader("content-type", "application/json")
-        .addHeader("authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsImF1ZCI6ImJmNTk2MjVhLWUwZGItNGVkMC1iZTk0LTI2N2I3M2YxNjQzZiIsInByZHRfY2QiOiIiLCJpc3MiOiJ1bm9ndyIsImV4cCI6MTcyMDUyNjM4OCwiaWF0IjoxNzIwNDM5OTg4LCJqdGkiOiJQU0NBTUNwUm5qSW81MkF0Y29veTNLU1REVkd4emx2TFhLTWcifQ.3KNRUIR8JYVlpJTobcS4MHaYURGX95fEp7F7SZPL9af4rZrILkO2uRtQ8xFaNwnbjzytefJKY0Tg7C5HK_Dq0Q")
+        .addHeader("authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsImF1ZCI6IjhjMDlmMzU1LTk2MTUtNDdiOS1hOTNhLTlmOGVlZWNiNmZkOCIsInByZHRfY2QiOiIiLCJpc3MiOiJ1bm9ndyIsImV4cCI6MTcyMDYxNjY0OCwiaWF0IjoxNzIwNTMwMjQ4LCJqdGkiOiJQU0NBTUNwUm5qSW81MkF0Y29veTNLU1REVkd4emx2TFhLTWcifQ.RebFg1bSIHTD5-67gP_Q2des27lT7SLaLtut_wCKOLOD_Op341mD7SEW50BE-BoaJ_Gw4zNLYd0ldoAUiw2u2Q")
         .addHeader("appkey", "PSCAMCpRnjIo52Atcooy3KSTDVGxzlvLXKMg")
         .addHeader("appsecret", "aJ4WQxVfByuf5WWoO5IeRFvphNJWBYJpq00zvobmtmx6w9n7CdxRj9mbK13S3F343wjI26kT3yvwcpozDPY5Hx3qH6ODmNuEUqoDbgGZ1seuwWSeT5X8bd/HkiqqN8kFlHVk1TlYkm1U5MXIqxAtnITJGSti7WEm9ggKTC3UY6zQDQ9oUAs=")
         .addHeader("tr_id", "FHKST03010100")
@@ -49,7 +73,7 @@ fun getHistoryData(stockCode: String, startDate: String, endDate: String, period
         }
     }
     loadPriceThread.start()
-    Thread.sleep(500)
+    sleep(500)
     loadPriceThread.join()
     return dailyStockJson
 }
@@ -58,4 +82,21 @@ fun parseHistoryData(responseStr:String): List<stockData>{
     val stockData = Gson().fromJson(responseStr, Outputs::class.java)
     Log.d("Parsing!", responseStr)
     return stockData.output2
+}
+
+
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun getDayEarlier(dateString: String): String {
+    // Define the date formatter
+    val formatter = DateTimeFormatter.ofPattern("yyyyMMdd")
+
+    // Parse the date string into a LocalDate object
+    val date = LocalDate.parse(dateString, formatter)
+
+    // Subtract one day from the date
+    val dayEarlier = date.minusDays(1)
+
+    // Format the new date back into a string
+    return dayEarlier.format(formatter)
 }

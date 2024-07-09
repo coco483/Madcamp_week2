@@ -1,14 +1,9 @@
 package com.example.madcamp_week2
 
 import UserDataHolder
-import com.example.madcamp_week2.R.layout
-import com.example.madcamp_week2.R.id
 import android.app.DatePickerDialog
-import android.app.DatePickerDialog.OnDateSetListener
-import android.app.Dialog
-import android.content.Context
-import android.content.res.Resources
 import android.icu.util.Calendar
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -17,21 +12,13 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.DatePicker
 import android.widget.EditText
-import android.widget.LinearLayout
-import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.ActionBar
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
-import androidx.compose.foundation.layout.padding
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.marginEnd
-import androidx.core.view.marginLeft
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.madcamp_week2.Class.Stock
+import com.example.madcamp_week2.Class.StrategyReturn
 import com.example.madcamp_week2.CodeBlock.ActionBlock
 import com.example.madcamp_week2.MyLanguage.Action
 import com.example.madcamp_week2.MyLanguage.Strategy
@@ -40,7 +27,6 @@ import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import kotlin.math.roundToInt
 
 
 class StrategyAddFragment: Fragment() {
@@ -72,6 +58,7 @@ class StrategyAddFragment: Fragment() {
         return binding.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -125,7 +112,7 @@ class StrategyAddFragment: Fragment() {
             adapter.addAction(newActionBlock)
         }
         binding.fragmentStrategyAddCalculateBTN.setOnClickListener {
-            if (actionBlockList.isEmpty()) Toast.makeText(requireContext(), "no action!", Toast.LENGTH_SHORT).show()
+            if (actionBlockList.isEmpty()) Toast.makeText(requireContext(), "1개 이상의 조건 거래가 필요합니다", Toast.LENGTH_SHORT).show()
             else{
                 val actionList:MutableList<Action> = mutableListOf()
                 val relatedStockIdList: MutableList<Stock> = mutableListOf()
@@ -135,13 +122,13 @@ class StrategyAddFragment: Fragment() {
                         actionList.add(action)
                         relatedStockIdList += action.involvedStockList
                     } else {
-                        Toast.makeText(requireContext(), "1개 이상의 조건 거래가 필요합니다", Toast.LENGTH_SHORT).show()
                         return@setOnClickListener
                     }
                 }
                 val strategy = Strategy("title", relatedStockIdList, actionList)
                 Log.d("StrategyCalculate", "$startDate, $endDate, $initialCash, ${Strategy}")
-                val returnToInvestment = strategy.calculate(startDate, endDate, initialCash)
+                val strategyReturn = strategy.calculate(startDate, endDate, initialCash)
+                openShowReturnFragment(strategyReturn)
             }
         }
         binding.fragmentStrategyAddSaveBTN.setOnClickListener {
@@ -218,6 +205,27 @@ class StrategyAddFragment: Fragment() {
                 }
             }
         })
+    }
+
+    private fun openShowReturnFragment(strategyReturn: StrategyReturn) {
+        val showReturnFragment = ShowReturnFragment().apply {
+            arguments = Bundle().apply {
+                putDouble("RETURN_RATE", strategyReturn.returnRate)
+                putInt("CASH_AMOUNT", strategyReturn.cashAmount)
+                val keys = mutableListOf<String>()
+                val values = mutableListOf<String>()
+                for ((key, value) in strategyReturn.stockHoldMap) {
+                    keys.add(key)
+                    values.add(String.format("%.2f", value))
+                }
+                putStringArray("STOCK_NAME", keys.toTypedArray())
+                putStringArray("STOCK_AMOUNT", values.toTypedArray())
+            }
+        }
+        parentFragmentManager.beginTransaction()
+            .replace(com.example.madcamp_week2.R.id.blank_container, showReturnFragment)
+            .addToBackStack(null)
+            .commit()
     }
 
 }

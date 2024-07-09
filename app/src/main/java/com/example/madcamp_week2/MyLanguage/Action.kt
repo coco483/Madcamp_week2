@@ -12,7 +12,7 @@ data class Action(
     val involvedStockList: List<Stock>
 ) {
     fun getAllRequests(startDate:String, endDate:String, involvedStockData: Map<String, Map<String, stockData>>): List<TradeRequest> {
-        //involvedStockData: stockID -> { date -> stockData }
+        //involvedStockData: stockName -> { date -> stockData }
 
         // find all trade requests that will happen
         val firstEntry = involvedStockData.entries.first()
@@ -20,12 +20,12 @@ data class Action(
         Log.d("Action", "allStockData: $involvedStockData")
         Log.d("Action", "num_response is $numResponse")
 
-        // convert into date -> { stockID -> stockData }
+        // convert into date -> { stockName -> stockData }
         val dateToStockDataMap: MutableMap<String, MutableMap<String, stockData>> = mutableMapOf()
-        for ((stockID, dateMap) in involvedStockData) {
+        for ((stockName, dateMap) in involvedStockData) {
             for ((date, stockData) in dateMap) {
                 val stockPriceMap = dateToStockDataMap.getOrPut(date) { mutableMapOf() }
-                stockPriceMap[stockID] = stockData
+                stockPriceMap[stockName] = stockData
             }
         }
         // collect all possible tradeRequest
@@ -46,7 +46,7 @@ enum class TradeType {BUY, SELL}
 class TradeRequest(
     val date: String,
     val tradeType: TradeType,
-    val stockId: String,
+    val stock: Stock,
     val stockAmount: Float
 )
 @Serializable
@@ -56,6 +56,6 @@ data class TradePlan (
     val amount: MyFloat
 ){
     fun makeTradeRequest(date:String, stockPriceMap: Map<String, stockData>):TradeRequest{
-        return TradeRequest(date, tradeType, stock.id, amount.evaluate(stockPriceMap))
+        return TradeRequest(date, tradeType, stock, amount.evaluate(stockPriceMap))
     }
 }

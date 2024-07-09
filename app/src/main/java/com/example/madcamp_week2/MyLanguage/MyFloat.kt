@@ -53,8 +53,8 @@ sealed interface MyFloat {
         val stock: Stock
     ) : MyFloat {
         override fun evaluate(stockPriceMap: Map<String, stockData>): Float {
-            Log.d("MyInt", "stockprice is: ${stockPriceMap[stock.id]}")
-            return stockPriceMap[stock.id]?.stck_clpr?.toFloat() ?: 0f
+            Log.d("MyInt", "stockprice is: ${stockPriceMap[stock.name]}")
+            return stockPriceMap[stock.name]?.stck_clpr?.toFloat() ?: 0f
         }
     }
 

@@ -1,6 +1,7 @@
 package com.example.madcamp_week2
 
 import UserDataHolder
+import android.os.Build
 import android.R
 import android.os.Bundle
 import android.util.Log
@@ -9,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.example.madcamp_week2.Class.Stock
 import com.example.madcamp_week2.Class.User
@@ -52,6 +54,7 @@ class StockDetailFragment : Fragment() {
         return binding.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -140,11 +143,11 @@ class StockDetailFragment : Fragment() {
 
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun reloadGraph(graph: GraphView, period: Char) {
-        val dailyStockJson = getHistoryData(stockId, "20160101", "20240706", period)
-        var dailyStockData = dailyStockJson?.let { parseHistoryData(it) }
+        var dailyStockData = getHistoryData(stockId, "20160101", "20240706", period)
 
-        dailyStockData = dailyStockData?.reversed()
+        dailyStockData = dailyStockData.reversed()
         if (dailyStockData != null) {
             addStockDataToGraph(graph, dailyStockData)
             formatGraphLabel(graph, dailyStockData)
