@@ -6,20 +6,33 @@
     android:layout_height="match_parent"
     android:background="#FFFFFF">
 
+    <TextView
+        android:id="@+id/stockSearch_Intro_TV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:text="주식 검색하기"
+        android:textSize="20sp"
+        android:fontFamily="@font/pretendard1"
+        android:textStyle="bold"
+        android:gravity=""
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="50dp" />
+
     <AutoCompleteTextView
         android:id="@+id/stockSearch_searchInput_ACTV"
-        android:layout_width="400dp"
+        android:layout_width="300dp"
         android:layout_height="35dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="25dp"
         android:background="@drawable/searchbar"
         android:completionThreshold="1"
         android:fontFamily="@font/pretendard1"
         android:gravity="center"
-        android:hint="   종목 찾기"
         android:inputType="text"
         android:textSize="20sp"
         android:textStyle="normal"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/stockSearch_Intro_TV"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

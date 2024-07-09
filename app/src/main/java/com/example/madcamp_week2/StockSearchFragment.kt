@@ -50,7 +50,7 @@ class StockSearchFragment: Fragment() {
 //        val favoriteList = UserDataHolder.favoriteList
         val favoriteNameList = UserDataHolder.favoriteList.mapNotNull { stock ->
             stock.name
-        }
+        } // 여기 나중에 바꾸기
 
         Log.d("StockSearchFragment", "Favorite list: $favoriteNameList")
 

@@ -4,24 +4,32 @@
     android:layout_height="match_parent"
     android:padding="16dp">
 
-  <TextView
-      android:id="@+id/titleTextView"
+  <LinearLayout
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="Welcome to My App"
-      android:textSize="24sp"
-      android:layout_centerHorizontal="true"
-      android:layout_marginBottom="32dp"
-      android:layout_marginTop="64dp"/>
+      android:orientation="vertical"
+      android:layout_centerInParent="true"
+      android:gravity="center">
 
-  <Button
-      android:id="@+id/sign_in_button"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="Sign in with Google"
-      android:layout_below="@id/titleTextView"
-      android:layout_centerHorizontal="true"
-      android:padding="16dp"
-      android:textSize="18sp"/>
+    <TextView
+        android:id="@+id/titleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="주식 앱"
+        android:textSize="24sp"
+        android:layout_marginBottom="50dp"/>
+
+    <Button
+        android:id="@+id/sign_in_button"
+        android:layout_width="280dp"
+        android:layout_height="40dp"
+        android:text="구글 로그인"
+        android:fontFamily="@font/pretendard1"
+        android:textColor="@color/white"
+        android:layout_below="@id/titleTextView"
+        android:background="@drawable/button1"
+        android:padding="0dp"
+        android:textSize="15sp"/>
+  </LinearLayout>
 
 </RelativeLayout>
