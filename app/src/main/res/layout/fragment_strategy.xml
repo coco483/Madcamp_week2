@@ -16,7 +16,8 @@
         android:padding="0dp"
         android:src="@drawable/logocolor"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:adjustViewBounds="true"/>
 
     <TextView
         android:id="@+id/strategy_content_TV"
@@ -28,10 +29,11 @@
         android:gravity="center"
         android:text="주식 전략 보기"
         android:textColor="@color/black"
-        android:textSize="25dp"
+        android:textSize="23dp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/stockStrategy_logo_IV" />
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/strategy_content_RV"

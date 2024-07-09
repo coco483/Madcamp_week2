@@ -6,21 +6,25 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="#FFC107">
+    android:background="@drawable/block"
+    android:layout_margin="10dp">
 
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding ="5dp">
+        android:padding ="7dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:padding ="5dp"
-            android:text="When" />
+            android:fontFamily="@font/pretendard1"
+            android:textSize="13dp"
+            android:text="when"
+            android:textColor="@color/black"/>
 
         <FrameLayout
             android:id="@+id/block_action_condition"
@@ -30,7 +34,7 @@
             android:layout_height="wrap_content"
             android:minHeight="30dp"
             android:minWidth="100dp"
-            android:background="#FFEB3B" />
+            android:background="@drawable/block2" />
 
 
     </LinearLayout>
@@ -39,13 +43,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding ="5dp">
+        android:padding ="7dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding ="5dp"
-            android:text="Do" />
+            android:fontFamily="@font/pretendard1"
+            android:textSize="13dp"
+            android:text="what"
+            android:textColor="@color/black"/>
 
         <FrameLayout
             android:id="@+id/block_action_trade_plan"
@@ -55,7 +62,7 @@
             android:layout_height="wrap_content"
             android:minHeight="30dp"
             android:minWidth="100dp"
-            android:background="#FFEB3B" />
+            android:background="@drawable/block2" />
 
 
     </LinearLayout>

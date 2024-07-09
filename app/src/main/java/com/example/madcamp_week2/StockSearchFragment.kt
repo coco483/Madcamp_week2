@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
@@ -33,8 +34,11 @@ class StockSearchFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val anim = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_in_left)
+        binding.root.startAnimation(anim)
+
         val searchAdapter = StockDataHolder.stockList?.let {
-            ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, it)
+            ArrayAdapter(requireContext(), R.layout.simple_list_item_1, it)
         }
         binding.stockSearchSearchInputACTV.setAdapter(searchAdapter)
         binding.stockSearchSearchInputACTV.setOnItemClickListener { adapterView, view, i, l ->
@@ -44,7 +48,7 @@ class StockSearchFragment: Fragment() {
 
         // Get favorite list from FavoriteHolder
 //        val favoriteList = UserDataHolder.favoriteList
-        val favoriteNameList = UserDataHolder.favoriteList.mapNotNull { stock ->
+        val favoriteNameList = favoriteList.mapNotNull { stock ->
             stock.name
         } // 여기 나중에 바꾸기
 

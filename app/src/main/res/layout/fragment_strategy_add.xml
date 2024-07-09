@@ -4,11 +4,35 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:scrollbars="none"
-    android:orientation="vertical"
-    android:layout_gravity="center"
-    android:padding="20dp">
+    android:padding="0dp"
+    android:background="#ffffff">
 
+    <ImageView
+        android:id="@+id/stockStrategy_logo_IV"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="0dp"
+        android:contentDescription="Logo"
+        android:padding="0dp"
+        android:src="@drawable/logocolor"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:adjustViewBounds="true"/>
+
+    <TextView
+        android:id="@+id/stockStrategy_intro_IV"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:text="내 전략 추가하기"
+        android:textSize="23sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:fontFamily="@font/pretendard1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/stockStrategy_logo_IV"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <LinearLayout
         android:id="@+id/fragment_strategyAdd_stats_LL"
@@ -16,13 +40,15 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:orientation="horizontal"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_margin="20dp"
+        app:layout_constraintTop_toBottomOf="@id/stockStrategy_intro_IV">
 
         <TextView
             android:id="@+id/fragment_strategyAdd_startDate_TV"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:layout_weight="1"
+            android:fontFamily="@font/pretendard1"
             android:text="시작: 20240605" />
 
         <TextView
@@ -32,6 +58,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:layout_weight="1"
+            android:fontFamily="@font/pretendard1"
             android:text="종료: 20240706" />
 
         <TextView
@@ -39,15 +66,17 @@
             android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:layout_weight="1"
+            android:fontFamily="@font/pretendard1"
             android:text="투자금 100만원" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:orientation="vertical"
+        android:layout_margin="20dp"
         app:layout_constraintTop_toBottomOf="@id/fragment_strategyAdd_stats_LL"
-        app:layout_constraintBottom_toTopOf="@id/fragment_strategyAdd_button_LL"
-        android:orientation="vertical">
+        app:layout_constraintBottom_toTopOf="@id/fragment_strategyAdd_button_LL">
 
         <HorizontalScrollView
             android:layout_width="match_parent"
@@ -59,59 +88,52 @@
                 android:id="@+id/fragment_strategyAdd_action_RV"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent">
-
             </androidx.recyclerview.widget.RecyclerView>
         </HorizontalScrollView>
-
     </LinearLayout>
-
 
     <LinearLayout
         android:id="@+id/fragment_strategyAdd_button_LL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:layout_editor_absoluteX="20dp">
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:weightSum="3"
+        android:layout_margin="20dp"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <Button
             android:id="@+id/fragment_strategyAdd_addAction_BTN"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="전략 추가하기" />
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:layout_margin="5dp"
+            android:background="@drawable/button2"
+            android:text="추가"
+            android:textColor="#4880ee" />
 
-        <LinearLayout
+        <Button
+            android:id="@+id/fragment_strategyAdd_save_BTN"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:layout_margin="5dp"
+            android:background="@drawable/button2"
+            android:elevation="10dp"
+            android:text="저장"
+            android:textColor="#4880ee" />
 
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/fragment_strategyAdd_save_BTN"
-                android:layout_width="150dp"
-                android:layout_height="40dp"
-                android:layout_margin="5dp"
-                android:layout_weight="1"
-                android:background="@drawable/button1"
-                android:elevation="10dp"
-                android:text="저장"
-                android:textColor="@android:color/white" />
-
-            <Button
-                android:id="@+id/fragment_strategyAdd_calculate_BTN"
-                android:layout_width="150dp"
-                android:layout_height="40dp"
-                android:layout_margin="5dp"
-                android:layout_weight="1"
-                android:background="@drawable/button1"
-                android:elevation="10dp"
-                android:text="전략 계산하기"
-                android:textColor="@android:color/white" />
-
-        </LinearLayout>
+        <Button
+            android:id="@+id/fragment_strategyAdd_calculate_BTN"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:layout_margin="5dp"
+            android:background="@drawable/button2"
+            android:elevation="10dp"
+            android:text="계산"
+            android:textColor="#4880ee" />
     </LinearLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

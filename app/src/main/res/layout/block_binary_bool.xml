@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:gravity="center"
-    android:background="#BBDEFB"
+    android:background="@drawable/block3"
     android:padding ="5dp">
 
     <FrameLayout
@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:minHeight="30dp"
         android:minWidth="50dp"
-        android:background="#90CAF9" />
+        android:background="@drawable/block4" />
 
     <TextView
         android:id="@+id/block_binaryBool_operator"
@@ -24,8 +24,10 @@
         android:minHeight="30dp"
         android:padding ="5dp"
         android:gravity="center"
-        android:text="and"
-        android:textSize="20sp"/>
+        android:fontFamily="@font/pretendard1"
+        android:textSize="13dp"
+        android:text="그리고"
+        android:textColor="@color/black"/>
 
     <FrameLayout
         android:id="@+id/block_binaryBool_rightOp"
@@ -33,6 +35,6 @@
         android:layout_height="wrap_content"
         android:minHeight="30dp"
         android:minWidth="50dp"
-        android:background="#90CAF9" />
+        android:background="@drawable/block4" />
 
 </LinearLayout>

@@ -14,6 +14,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.DatePicker
 import android.widget.EditText
 import android.widget.LinearLayout
@@ -73,6 +74,9 @@ class StrategyAddFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val anim = AnimationUtils.loadAnimation(requireContext(), android.R.anim.slide_in_left)
+        binding.root.startAnimation(anim)
 
         val recyclerView = binding.fragmentStrategyAddActionRV
         val adapter = ActionBlockAdapter(actionBlockList, requireContext())

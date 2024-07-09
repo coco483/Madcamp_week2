@@ -77,7 +77,12 @@ class LoginActivity : AppCompatActivity() {
             val user = UserDataHolder.getUser()
             if (user != null) {
                 // 사용자가 이미 서버에 등록되어 있는지 확인 후 처리
-                checkUserOnServer(user)
+                val loadPriceThread = Thread {
+                    checkUserOnServer(user)
+                }
+                loadPriceThread.start()
+                Thread.sleep(500)
+                loadPriceThread.join()
             } else {
                 Log.e("handleSignInResult", "com.example.madcamp_week2.Class.User data is null")
                 Toast.makeText(this, "사용자 데이터를 가져올 수 없습니다.", Toast.LENGTH_SHORT).show()

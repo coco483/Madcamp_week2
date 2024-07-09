@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -37,6 +38,9 @@ class StrategyFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val anim = AnimationUtils.loadAnimation(requireContext(), android.R.anim.slide_in_left)
+        view.startAnimation(anim)
 
         // RecyclerView 설정
         recyclerViewStrategy.layoutManager = LinearLayoutManager(requireContext())

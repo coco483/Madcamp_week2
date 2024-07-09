@@ -1,11 +1,13 @@
 package com.example.madcamp_week2
 
 import UserDataHolder
+import android.R
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.madcamp_week2.Class.Stock
@@ -52,6 +54,9 @@ class StockDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val anim = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_in_left)
+        binding.root.startAnimation(anim)
 
         // Set the stock name and market to the respective TextViews
         binding.stockDetailNameTV.text = stockName

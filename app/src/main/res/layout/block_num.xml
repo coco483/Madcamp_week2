@@ -4,17 +4,16 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:gravity="center_vertical"
-    android:background="#90CAF9"
     android:padding ="3dp">
 
     <EditText
         android:id="@+id/num_block_num_ET"
-        android:background="#BBDEFB"
+        android:background="@drawable/block4"
         android:layout_width="wrap_content"
         android:layout_height="30dp"
         android:minWidth="50dp"
         android:gravity="center"
-        android:textSize="20dp"
+        android:textSize="12dp"
         android:inputType="numberDecimal"
         android:hint="숫자 입력" />
 </LinearLayout>
