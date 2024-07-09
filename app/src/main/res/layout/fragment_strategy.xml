@@ -6,19 +6,32 @@
     android:layout_height="match_parent"
     android:background="#ffffff">
 
+    <ImageView
+        android:id="@+id/stockStrategy_logo_IV"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="0dp"
+        android:contentDescription="Logo"
+        android:padding="0dp"
+        android:src="@drawable/logocolor"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/strategy_content_TV"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:background="@null"
+        android:fontFamily="@font/pretendard1"
         android:gravity="center"
         android:text="주식 전략 보기"
+        android:textColor="@color/black"
         android:textSize="25dp"
         android:textStyle="bold"
-        android:textColor="@color/black"
-        android:fontFamily="@font/pretendard1"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@null"
-        />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/stockStrategy_logo_IV" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/strategy_content_RV"
@@ -29,8 +42,6 @@
         app:layout_constraintTop_toBottomOf="@id/strategy_content_TV"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        />
-
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

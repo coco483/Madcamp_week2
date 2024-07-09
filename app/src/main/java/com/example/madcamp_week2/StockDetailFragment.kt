@@ -13,6 +13,7 @@ import com.example.madcamp_week2.Class.User
 import com.example.madcamp_week2.databinding.FragmentStockDetailBinding
 import com.google.gson.Gson
 import com.jjoe64.graphview.DefaultLabelFormatter
+import com.jjoe64.graphview.GridLabelRenderer
 import com.jjoe64.graphview.GraphView
 import com.jjoe64.graphview.series.DataPoint
 import com.jjoe64.graphview.series.LineGraphSeries
@@ -21,15 +22,16 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-
-class StockDetailFragment: Fragment() {
+class StockDetailFragment : Fragment() {
     private var _binding: FragmentStockDetailBinding? = null
     private val binding get() = _binding!!
     private var stockDataSeries = LineGraphSeries<DataPoint>()
 
     private lateinit var stockId: String
-    private lateinit var stockName:String
-    private lateinit var stockMarket:String
+    private lateinit var stockName: String
+    private lateinit var stockMarket: String
+
+    private var isFavorite = false // Track whether the stock is in favorites
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +41,7 @@ class StockDetailFragment: Fragment() {
             stockMarket = it.getString("STOCK_MARKET").toString()
         }
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -49,10 +52,39 @@ class StockDetailFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        reloadGraph(binding.stockDetailGraphGV, 'D')
-        binding.stockFavoriteBT.setOnClickListener {
-            UserDataHolder.addFavorite(Stock(stockId, stockName, stockMarket))
 
+        // Set the stock name and market to the respective TextViews
+        binding.stockDetailNameTV.text = stockName
+        binding.stockDetailMarketTV.text = stockMarket
+
+        // Check if the stock is already in favorites
+        isFavorite = UserDataHolder.isFavorite(Stock(stockId, stockName, stockMarket))
+
+        // Update favorite button text based on initial state
+        updateFavoriteButton()
+
+        // Reload graph with 'D' period
+        reloadGraph(binding.stockDetailGraphGV, 'D')
+
+        // Add to favorites button click listener
+        binding.stockFavoriteBT.setOnClickListener {
+            if (isFavorite) {
+                // Remove from favorites
+                UserDataHolder.removeFavorite(Stock(stockId, stockName, stockMarket))
+                Toast.makeText(context, "Removed from favorite list", Toast.LENGTH_SHORT).show()
+                val user = UserDataHolder.getUser()
+                Log.d("StockDetailFragment", "User after removal: $user")
+            } else {
+                // Add to favorites
+                UserDataHolder.addFavorite(Stock(stockId, stockName, stockMarket))
+                Toast.makeText(context, "Added to favorite list", Toast.LENGTH_SHORT).show()
+                val user = UserDataHolder.getUser()
+                Log.d("StockDetailFragment", "User after addal: $user")
+            }
+            // Toggle favorite state
+            isFavorite = !isFavorite
+            // Update favorite button text
+            updateFavoriteButton()
 
             // Fetch user from server and compare IDs
             val user = UserDataHolder.getUser()
@@ -60,12 +92,13 @@ class StockDetailFragment: Fragment() {
                 Toast.makeText(context, "User data is not available", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
+
             // getUser gives user with updated Favorite List and Strategy List
             ApiClient.apiService.updateUserData(user.id, user).enqueue(object : Callback<ResponseBody> {
                 override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                     if (response.isSuccessful) {
                         context?.let {
-                            Toast.makeText(it, "added to favorite list", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(it, "Added to favorite list", Toast.LENGTH_SHORT).show()
                         }
                     } else {
                         val errorMessage = "Failed to update favorite list: ${response.message()}"
@@ -74,6 +107,7 @@ class StockDetailFragment: Fragment() {
                         }
                     }
                 }
+
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                     val error = "Error: ${t.message}"
                     context?.let {
@@ -81,20 +115,39 @@ class StockDetailFragment: Fragment() {
                     }
                 }
             })
-            }
+        }
+
+        // Close button click listener
+        binding.stockCloseBT.setOnClickListener {
+            // Navigate back to SearchFragment
+            requireActivity().supportFragmentManager.popBackStack()
+        }
     }
 
-    private fun reloadGraph(graph: GraphView, period: Char){
-        var dailyStockJson = getHistoryData(stockId, "20160101", "20240706", period)
+    private fun updateFavoriteButton() {
+        if (isFavorite) {
+            binding.stockFavoriteBT.text = "즐겨찾기 제거"
+        } else {
+            binding.stockFavoriteBT.text = "즐겨찾기 추가"
+        }
+        Log.d("StockDetailFragment", "Favorite button text updated. isFavorite: $isFavorite")
+    }
+
+
+
+    private fun reloadGraph(graph: GraphView, period: Char) {
+        val dailyStockJson = getHistoryData(stockId, "20160101", "20240706", period)
         var dailyStockData = dailyStockJson?.let { parseHistoryData(it) }
 
         dailyStockData = dailyStockData?.reversed()
         if (dailyStockData != null) {
             addStockDataToGraph(graph, dailyStockData)
             formatGraphLabel(graph, dailyStockData)
+            customizeGraphView(graph)
         }
     }
-    private fun addStockDataToGraph(graph: GraphView, stockDatas:List<stockData>){
+
+    private fun addStockDataToGraph(graph: GraphView, stockDatas: List<stockData>) {
         val maxDataPoints = stockDatas.size
         var dayCount = 0.0
         for (stockData in stockDatas) {
@@ -106,7 +159,7 @@ class StockDetailFragment: Fragment() {
         graph.addSeries(stockDataSeries)
     }
 
-    private fun formatGraphLabel(graph: GraphView, stockDatas: List<stockData>){
+    private fun formatGraphLabel(graph: GraphView, stockDatas: List<stockData>) {
         graph.gridLabelRenderer.labelFormatter = object : DefaultLabelFormatter() {
             override fun formatLabel(value: Double, isValueX: Boolean): String {
                 return if (isValueX) {
@@ -121,9 +174,21 @@ class StockDetailFragment: Fragment() {
         }
         graph.gridLabelRenderer.setHorizontalLabelsAngle(150)
         graph.viewport.isScrollable = true
-        graph.viewport.setXAxisBoundsManual(true)
+        graph.viewport.isXAxisBoundsManual = true
         graph.viewport.setMinX(0.0)
         graph.viewport.setMaxX(99.0)
+    }
+
+    private fun customizeGraphView(graph: GraphView) {
+        // Get the GridLabelRenderer from the GraphView
+        val gridLabelRenderer = graph.gridLabelRenderer
+
+        // Hide Y axis labels
+        gridLabelRenderer.isVerticalLabelsVisible = false
+        gridLabelRenderer.isHorizontalLabelsVisible = false
+
+        // Hide grid lines
+        gridLabelRenderer.gridStyle = GridLabelRenderer.GridStyle.NONE
     }
 
     override fun onDestroyView() {

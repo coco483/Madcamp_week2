@@ -13,50 +13,57 @@ object UserDataHolder {
 //    private val _favoriteNameList: MutableSet<String> = mutableSetOf()
 
     fun setUser(account: GoogleSignInAccount?) {
-        user = if (account != null) {
+        user = account?.let {
             User(
-                id = account.id ?: "",
-                email = account.email,
-                displayName = account.displayName,
+                id = it.id ?: "",
+                email = it.email,
+                displayName = it.displayName,
                 favorites = "[]",
                 strategyList = "[]"
             )
-        } else {
-            null
         }
     }
 
     fun getUser(): User? {
-        val jsonFavoriteList = Gson().toJson(_favoriteList)
+        val jsonFavoriteList = Gson().toJson(_favoriteList.toList())
         val jsonStrategyList = strategyListToJson(_strategyList)
-        return user?.let { User(user!!.id, user!!.email, user!!.displayName, jsonFavoriteList, jsonStrategyList) }
+        return user?.copy(favorites = jsonFavoriteList, strategyList = jsonStrategyList)
     }
 
     val favoriteList: List<Stock>
         get() = _favoriteList.toList()
+
     val strategyList: MutableList<Strategy>
         get() = _strategyList
 
-
     fun addFavorite(stock: Stock) {
         _favoriteList.add(stock)
+    }
+
+    fun removeFavorite(stock: Stock) {
+        _favoriteList.removeAll { it.id == stock.id }
+    }
+
+    fun isFavorite(stock: Stock): Boolean {
+        return _favoriteList.any { it.id == stock.id }
     }
 
     fun addAllFavorites(stocks: List<Stock>) {
         _favoriteList.addAll(stocks)
     }
 
-
-    fun addStrategy(strategy: Strategy){
+    fun addStrategy(strategy: Strategy) {
         _strategyList.add(strategy)
     }
 
-    fun addAllStrategy(strategyList: List<Strategy>){
+    fun addAllStrategy(strategyList: List<Strategy>) {
         _strategyList.addAll(strategyList)
     }
 
-    fun updateStrategy(strategy: Strategy, pos: Int){
-        _strategyList[pos] = strategy
+    fun updateStrategy(strategy: Strategy, pos: Int) {
+        if (pos in _strategyList.indices) {
+            _strategyList[pos] = strategy
+        }
     }
 
 //    fun addFavoriteName(stockName: String) {

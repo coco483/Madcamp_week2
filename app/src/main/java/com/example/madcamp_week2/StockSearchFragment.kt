@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,11 +26,13 @@ class StockSearchFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmetStockSearchBinding.inflate(inflater, container, false)
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         val searchAdapter = StockDataHolder.stockList?.let {
             ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, it)
         }

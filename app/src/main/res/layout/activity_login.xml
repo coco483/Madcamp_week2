@@ -11,11 +11,22 @@
       android:layout_centerInParent="true"
       android:gravity="center">
 
+    <ImageView
+        android:id="@+id/titleImageView"
+        android:layout_width="250dp"
+        android:layout_height="150dp"
+        android:text="주식 앱"
+        android:textSize="24sp"
+        android:background="@drawable/logocolor"
+        android:layout_marginBottom="50dp"/>
+
     <TextView
         android:id="@+id/titleTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="주식 앱"
+        android:text="당신의 주식 전략 도우미"
+        android:fontFamily="@font/pretendard1"
+        android:textColor="#c0c0c0"
         android:textSize="24sp"
         android:layout_marginBottom="50dp"/>
 
@@ -23,7 +34,7 @@
         android:id="@+id/sign_in_button"
         android:layout_width="280dp"
         android:layout_height="40dp"
-        android:text="구글 로그인"
+        android:text="구글 아이디로 로그인하기"
         android:fontFamily="@font/pretendard1"
         android:textColor="@color/white"
         android:layout_below="@id/titleTextView"
