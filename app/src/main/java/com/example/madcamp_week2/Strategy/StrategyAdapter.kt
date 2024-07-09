@@ -53,7 +53,7 @@ class StrategyAdapter(private var itemList: MutableList<Strategy>, val onclick: 
             itemView.findViewById(R.id.strategylist_tag_RV)
         private val cardView: CardView = itemView.findViewById(R.id.strategylist_view_CV)
         private val itemNumber: TextView = itemView.findViewById(R.id.strategy_number_TV) // 순번을 표시할 TextView
-
+        private val returnRate: TextView = itemView.findViewById(R.id.strategylist_returnRate_TV)
         fun bind(strategyItem: Strategy, position: Int) {
             strategyTitle.text = strategyItem.title
 
@@ -66,6 +66,12 @@ class StrategyAdapter(private var itemList: MutableList<Strategy>, val onclick: 
                 layoutManager =
                     LinearLayoutManager(itemView.context, LinearLayoutManager.HORIZONTAL, false)
                 adapter = TagAdapter(strategyItem.related_stock.map{ it. name })
+            }
+
+            // 최고 수익률 설정
+            if(strategyItem.greatestReturnRate != null) {
+                val formatReturnRate = "최고 수익률: " + String.format("%.2f", strategyItem.greatestReturnRate) + "%"
+                returnRate.text = formatReturnRate
             }
 
             cardView.setOnClickListener {

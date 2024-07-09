@@ -15,6 +15,7 @@ data class Strategy (
     val title: String,
     val related_stock: List<Stock>,
     val actionList: List<Action>,
+    var greatestReturnRate: Double? = null
 ){
 
     @RequiresApi(Build.VERSION_CODES.O)

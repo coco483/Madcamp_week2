@@ -18,57 +18,71 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/strategy_number_TV"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:gravity="center"
-                android:padding="8dp"
-                android:textColor="@android:color/black"
-                android:textSize="10sp"
-                android:textStyle="normal"/>
-
-            <ImageView
-                android:id="@+id/strategylist_image_TV"
-                android:layout_width="20dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
                 android:gravity="center_vertical"
-                android:fontFamily="@font/pretendard1"/>
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/strategy_number_TV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:gravity="center"
+                    android:padding="8dp"
+                    android:textColor="@android:color/black"
+                    android:textSize="10sp"
+                    android:textStyle="normal" />
+
+                <ImageView
+                    android:id="@+id/strategylist_image_TV"
+                    android:layout_width="20dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:fontFamily="@font/pretendard1"
+                    android:gravity="center_vertical" />
+
+                <TextView
+                    android:id="@+id/strategylist_content_TV"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/pretendard1"
+                    android:gravity="center_vertical"
+                    android:text="삼성전자"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/strategylist_tag_RV"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    app:spanCount="1" />
+            </LinearLayout>
 
             <TextView
-                android:id="@+id/strategylist_content_TV"
-                android:layout_width="0dp"
+                android:id="@+id/strategylist_returnRate_TV"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:fontFamily="@font/pretendard1"
-                android:text="삼성전자"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                android:textColor="@color/black"
-                android:gravity="center_vertical"/>
+                android:text="수익률: --%" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/strategylist_tag_RV"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_marginEnd="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:orientation="horizontal"
-                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                app:spanCount="1" />
         </LinearLayout>
+
     </androidx.cardview.widget.CardView>
 </RelativeLayout>

@@ -37,6 +37,7 @@ class StrategyAddFragment: Fragment() {
     private var startDate:String = ""
     private var endDate:String = ""
     private var initialCash: Int = 1000000
+    private var greatestReturnRate: Double? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -128,7 +129,11 @@ class StrategyAddFragment: Fragment() {
                 val strategy = Strategy("title", relatedStockIdList, actionList)
                 Log.d("StrategyCalculate", "$startDate, $endDate, $initialCash, ${Strategy}")
                 val strategyReturn = strategy.calculate(startDate, endDate, initialCash)
+                greatestReturnRate = strategyReturn.returnRate
+                strategy.greatestReturnRate = greatestReturnRate
+                if (StrategyPos != null) UserDataHolder.updateStrategy(strategy, StrategyPos!!)
                 openShowReturnFragment(strategyReturn)
+                updateUserToServer()
             }
         }
         binding.fragmentStrategyAddSaveBTN.setOnClickListener {
@@ -153,7 +158,7 @@ class StrategyAddFragment: Fragment() {
                     .setView(dialogView)
                     .setPositiveButton("OK") { _, _ ->
                         title = editText.text.toString()
-                        val strategy = Strategy(title, relatedStockIdList, actionList)
+                        val strategy = Strategy(title, relatedStockIdList, actionList, greatestReturnRate)
                         if (StrategyPos != null) UserDataHolder.updateStrategy(strategy, StrategyPos!!)
                         else UserDataHolder.addStrategy(strategy)
                         updateUserToServer()
