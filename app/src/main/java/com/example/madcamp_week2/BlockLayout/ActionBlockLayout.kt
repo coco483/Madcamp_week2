@@ -37,7 +37,7 @@ fun addTradePlanLayout(parentLayout: ViewGroup, context: Context, block:TradePla
         if (block.tradeType == TradeType.SELL) binding.blockTradePlanTradeType.isSelected = true
         else block.tradeType = TradeType.BUY
         setFloatBlock(binding.blockTradePlanStockAmount, context, block.amountBlock)
-        if (block.stockId != null) binding.blockTradePlanStockIDACTV.setText(block.stockId)
+        if (block.stock != null) binding.blockTradePlanStockIDACTV.setText(block.stock!!.name)
         // set child layout by user input
         binding.blockTradePlanTradeType.setOnCheckedChangeListener { _, isChecked ->
             block.tradeType = if (isChecked) TradeType.SELL else TradeType.BUY
@@ -53,7 +53,7 @@ fun addTradePlanLayout(parentLayout: ViewGroup, context: Context, block:TradePla
         binding.blockTradePlanStockIDACTV.setAdapter(searchAdapter)
         binding.blockTradePlanStockIDACTV.setOnItemClickListener { adapterView, view, i, l ->
             val selectedStock = adapterView.getItemAtPosition(i) as Stock
-            block.stockId = selectedStock.id
+            block.stock = selectedStock
         }
     }
 }

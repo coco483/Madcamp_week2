@@ -2,32 +2,33 @@ package com.example.madcamp_week2.CodeBlock
 
 import android.content.Context
 import android.widget.Toast
+import com.example.madcamp_week2.Class.Stock
 import com.example.madcamp_week2.MyLanguage.Action
 import com.example.madcamp_week2.MyLanguage.TradePlan
 import com.example.madcamp_week2.MyLanguage.TradeType
 
 class TradePlanBlock {
     var tradeType: TradeType? = null
-    var stockId: String? = null
+    var stock: Stock? = null
     var amountBlock: FloatBlock? = null
-    fun getTradePlan(context: Context): Pair<TradePlan, List<String>>? {
+    fun getTradePlan(context: Context): Pair<TradePlan, List<Stock>>? {
         if (tradeType == null) {
             Toast.makeText(context, "please fill in the tradeType", Toast.LENGTH_LONG).show()
-        } else if (stockId == null){
+        } else if (stock == null){
             Toast.makeText(context, "please fill in the trade stock Name", Toast.LENGTH_LONG).show()
         } else if (amountBlock == null){
             Toast.makeText(context, "please fill in the trade amount", Toast.LENGTH_LONG).show()
         } else {
             val (amount, idList) = amountBlock!!.getMyFloat(context) ?: Pair(null, listOf())
             if (amount != null){
-                return Pair(TradePlan(tradeType!!, stockId!!, amount), (idList+listOf(stockId!!)))
+                return Pair(TradePlan(tradeType!!, stock!!, amount), (idList+listOf(stock!!)))
             }
         }
         return null
     }
     fun setAllChild(tradePlan: TradePlan){
         tradeType = tradePlan.tradeType
-        stockId = tradePlan.stockId
+        stock = tradePlan.stock
         amountBlock = setAllChildOfFloat(tradePlan.amount)
     }
 }

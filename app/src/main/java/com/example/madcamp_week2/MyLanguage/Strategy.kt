@@ -1,6 +1,7 @@
 package com.example.madcamp_week2.MyLanguage
 
 import android.util.Log
+import com.example.madcamp_week2.Class.Stock
 import com.example.madcamp_week2.getHistoryData
 import com.example.madcamp_week2.parseHistoryData
 import com.example.madcamp_week2.stockData
@@ -9,26 +10,27 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Strategy (
     val title: String,
-    val related_stockID: List<String>,
+    val related_stock: List<Stock>,
     val actionList: List<Action>,
 ){
 
     fun calculate(startDate: String, endDate: String, initialCash:Int): Double{
-        if (related_stockID.isEmpty()) Log.d("Action", "There should be one stock involved")
+        if (related_stock.isEmpty()) Log.d("Action", "There should be one stock involved")
 
         // request all stock price data from api
         val allStockData: MutableMap<String, Map<String, stockData>> = mutableMapOf()
         // allStockData : stockID -> { date -> stockData }
-        for (stockID in related_stockID.toSet()){
-            val dailyStockJson = getHistoryData(stockID, startDate, endDate, 'D')
+        for (stock in related_stock.toSet()){
+            val dailyStockJson = getHistoryData(stock.id, startDate, endDate, 'D')
             val dailyStockData = parseHistoryData(dailyStockJson!!)
-            allStockData[stockID] = dailyStockData.associateBy { it.stck_bsop_date }
-            Log.d("Strategy", "involved stock ${stockID} added: $dailyStockJson")
+            allStockData[stock.id] = dailyStockData.associateBy { it.stck_bsop_date }
+            Log.d("Strategy", "involved stock ${stock} added: $dailyStockJson")
         }
         // get all tradeRequest from all actions
         val tradeRequestList = mutableListOf<TradeRequest>()
         for (action in actionList){
-            val actionInvolvedStockData =  allStockData.filterKeys { it in action.involvedStockIdList }
+            val involvedStockIdList: List<String> = action.involvedStockList.map { it.id }
+            val actionInvolvedStockData =  allStockData.filterKeys { it in involvedStockIdList }
             tradeRequestList.addAll(action.getAllRequests(startDate, endDate, actionInvolvedStockData))
         }
         Log.d("StrategyCalculate", "$tradeRequestList")

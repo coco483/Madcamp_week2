@@ -65,7 +65,7 @@ class StrategyAdapter(private var itemList: MutableList<Strategy>, val onclick: 
             strategyTagRecyclerView.apply {
                 layoutManager =
                     LinearLayoutManager(itemView.context, LinearLayoutManager.HORIZONTAL, false)
-                adapter = TagAdapter(strategyItem.related_stockID)
+                adapter = TagAdapter(strategyItem.related_stock.map{ it. name })
             }
 
             cardView.setOnClickListener {

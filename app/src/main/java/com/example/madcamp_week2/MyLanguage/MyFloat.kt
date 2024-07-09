@@ -1,6 +1,7 @@
 package com.example.madcamp_week2.MyLanguage
 
 import android.util.Log
+import com.example.madcamp_week2.Class.Stock
 import com.example.madcamp_week2.stockData
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.PolymorphicSerializer
@@ -49,11 +50,11 @@ sealed interface MyFloat {
 
     @Serializable
     data class MyStockPrice(
-        val stockID: String
+        val stock: Stock
     ) : MyFloat {
         override fun evaluate(stockPriceMap: Map<String, stockData>): Float {
-            Log.d("MyInt", "stockprice is: ${stockPriceMap[stockID]}")
-            return stockPriceMap[stockID]?.stck_clpr?.toFloat() ?: 0f
+            Log.d("MyInt", "stockprice is: ${stockPriceMap[stock.id]}")
+            return stockPriceMap[stock.id]?.stck_clpr?.toFloat() ?: 0f
         }
     }
 

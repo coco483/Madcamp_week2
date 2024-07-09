@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.madcamp_week2.BlockLayout.addCompareBlock
+import com.example.madcamp_week2.Class.Stock
 import com.example.madcamp_week2.CodeBlock.ActionBlock
 import com.example.madcamp_week2.MyLanguage.Action
 import com.example.madcamp_week2.MyLanguage.Strategy
@@ -67,12 +68,12 @@ class StrategyAddFragment: Fragment() {
             if (actionBlockList.isEmpty()) Toast.makeText(requireContext(), "no action!", Toast.LENGTH_SHORT).show()
             else{
                 val actionList:MutableList<Action> = mutableListOf()
-                val relatedStockIdList: MutableList<String> = mutableListOf()
+                val relatedStockIdList: MutableList<Stock> = mutableListOf()
                 for (actionBlock in actionBlockList){
                     val action = actionBlock.getAction(requireContext())
                     if (action != null) {
                         actionList.add(action)
-                        relatedStockIdList += action.involvedStockIdList
+                        relatedStockIdList += action.involvedStockList
                     } else return@setOnClickListener
                 }
                 val strategy = Strategy("title", relatedStockIdList, actionList)
@@ -91,12 +92,12 @@ class StrategyAddFragment: Fragment() {
             if (actionBlockList.isEmpty()) Toast.makeText(requireContext(), "no action!", Toast.LENGTH_SHORT).show()
             else{
                 val actionList:MutableList<Action> = mutableListOf()
-                val relatedStockIdList: MutableList<String> = mutableListOf()
+                val relatedStockIdList: MutableList<Stock> = mutableListOf()
                 for (actionBlock in actionBlockList){
                     val action = actionBlock.getAction(requireContext())
                     if (action != null) {
                         actionList.add(action)
-                        relatedStockIdList += action.involvedStockIdList
+                        relatedStockIdList += action.involvedStockList
                     } else return@setOnClickListener
                 }
                 val strategy = Strategy("title", relatedStockIdList, actionList)

@@ -37,13 +37,13 @@ fun addNumBlock(parentLayout: ViewGroup, context: Context, block: NumBlock) {
 
 fun addStockPriceBlock(parentLayout: ViewGroup, context: Context, block: StockPriceBlock) {
     return addBlock(parentLayout, context, BlockStockPriceBinding::inflate, block) { binding ->
-        if (block.stockID != null) binding.blockStockPriceACTV.setText(block.stockID)
+        if (block.stock != null) binding.blockStockPriceACTV.setText(block.stock!!.name)
         val searchAdapter = StockDataHolder
             .stockList?.let { ArrayAdapter(context, R.layout.simple_list_item_1, it) }
         binding.blockStockPriceACTV.setAdapter(searchAdapter)
         binding.blockStockPriceACTV.setOnItemClickListener { adapterView, view, i, l ->
             val selectedStock = adapterView.getItemAtPosition(i) as Stock
-            block.stockID = selectedStock.id
+            block.stock = selectedStock
         }
     }
 }

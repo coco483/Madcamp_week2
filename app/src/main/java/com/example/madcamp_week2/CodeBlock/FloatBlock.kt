@@ -2,18 +2,19 @@ package com.example.madcamp_week2.CodeBlock
 
 import android.content.Context
 import android.widget.Toast
+import com.example.madcamp_week2.Class.Stock
 import com.example.madcamp_week2.MyLanguage.FloatOperator
 import com.example.madcamp_week2.MyLanguage.MyBool
 import com.example.madcamp_week2.MyLanguage.MyFloat
 
 abstract class FloatBlock {
-    abstract fun getMyFloat(context: Context): Pair<MyFloat, List<String>>?
+    abstract fun getMyFloat(context: Context): Pair<MyFloat, List<Stock>>?
 }
 class FloatBinaryOpBlock : FloatBlock(){
     var rightOpBlock: FloatBlock? = null
     var leftOpBlock: FloatBlock? = null
     var floatOperator: FloatOperator? = null
-    override fun getMyFloat(context: Context): Pair<MyFloat, List<String>>? {
+    override fun getMyFloat(context: Context): Pair<MyFloat, List<Stock>>? {
         if (rightOpBlock == null) {
             Toast.makeText(context, "please fill in the right operand", Toast.LENGTH_LONG).show()
         } else if (leftOpBlock == null){
@@ -36,7 +37,7 @@ class FloatBinaryOpBlock : FloatBlock(){
 
 class NumBlock : FloatBlock(){
     var num: Float? = null
-    override fun getMyFloat(context: Context): Pair<MyFloat, List<String>>? {
+    override fun getMyFloat(context: Context): Pair<MyFloat, List<Stock>>? {
         if (num == null) {
             Toast.makeText(context, "please fill in the number", Toast.LENGTH_SHORT).show()
             return null
@@ -49,14 +50,14 @@ class NumBlock : FloatBlock(){
 }
 
 class StockPriceBlock: FloatBlock() {
-    var stockID: String? = null
-    override fun getMyFloat(context: Context): Pair<MyFloat, List<String>>? {
-        if (stockID == null) {
+    var stock: Stock? = null
+    override fun getMyFloat(context: Context): Pair<MyFloat, List<Stock>>? {
+        if (stock == null) {
             Toast.makeText(context, "please choose the stock", Toast.LENGTH_SHORT).show()
             return null
-        } else return Pair(MyFloat.MyStockPrice(stockID!!), listOf(stockID!!))
+        } else return Pair(MyFloat.MyStockPrice(stock!!), listOf(stock!!))
     }
     fun setAllChild(myStockPrice: MyFloat.MyStockPrice){
-        stockID = myStockPrice.stockID
+        stock = myStockPrice.stock
     }
 }

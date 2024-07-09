@@ -1,6 +1,7 @@
 package com.example.madcamp_week2.MyLanguage
 
 import android.util.Log
+import com.example.madcamp_week2.Class.Stock
 import com.example.madcamp_week2.stockData
 import kotlinx.serialization.Serializable
 
@@ -8,7 +9,7 @@ import kotlinx.serialization.Serializable
 data class Action(
     val condition: MyBool,
     val tradePlan: TradePlan,
-    val involvedStockIdList: List<String>
+    val involvedStockList: List<Stock>
 ) {
     fun getAllRequests(startDate:String, endDate:String, involvedStockData: Map<String, Map<String, stockData>>): List<TradeRequest> {
         //involvedStockData: stockID -> { date -> stockData }
@@ -50,10 +51,10 @@ class TradeRequest(
 @Serializable
 data class TradePlan (
     val tradeType: TradeType,
-    val stockId: String,
+    val stock: Stock,
     val amount: MyFloat
 ){
     fun makeTradeRequest(date:String, stockPriceMap: Map<String, stockData>):TradeRequest{
-        return TradeRequest(date, tradeType, stockId, amount.evaluate(stockPriceMap))
+        return TradeRequest(date, tradeType, stock.id, amount.evaluate(stockPriceMap))
     }
 }

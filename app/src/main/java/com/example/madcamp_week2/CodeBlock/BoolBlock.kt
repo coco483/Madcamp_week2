@@ -2,6 +2,7 @@ package com.example.madcamp_week2.CodeBlock
 
 import android.content.Context
 import android.widget.Toast
+import com.example.madcamp_week2.Class.Stock
 import com.example.madcamp_week2.MyLanguage.BoolOperator
 import com.example.madcamp_week2.MyLanguage.CompareOperator
 import com.example.madcamp_week2.MyLanguage.FloatOperator
@@ -10,14 +11,14 @@ import com.example.madcamp_week2.MyLanguage.MyFloat
 import com.example.madcamp_week2.MyLanguage.TradePlan
 
 abstract class BoolBlock {
-    abstract fun getMyBool(context: Context) : Pair<MyBool, List<String>>?
+    abstract fun getMyBool(context: Context) : Pair<MyBool, List<Stock>>?
 }
 
 class CompareBlock: BoolBlock() {
     var rightOpBlock: FloatBlock? = null
     var leftOpBlock: FloatBlock? = null
     var comparator: CompareOperator? = null
-    override fun getMyBool(context: Context): Pair<MyBool, List<String>>? {
+    override fun getMyBool(context: Context): Pair<MyBool, List<Stock>>? {
         if (rightOpBlock == null) {
             Toast.makeText(context, "please fill in the right operand", Toast.LENGTH_LONG).show()
         } else if (leftOpBlock == null){
@@ -44,7 +45,7 @@ class BoolBinaryOpBlock : BoolBlock(){
     var rightOpBlock: BoolBlock? = null
     var leftOpBlock: BoolBlock? = null
     var boolOperator: BoolOperator? = null
-    override fun getMyBool(context: Context): Pair<MyBool, List<String>>? {
+    override fun getMyBool(context: Context): Pair<MyBool, List<Stock>>? {
         if (rightOpBlock == null) {
             Toast.makeText(context, "please fill in the right operand", Toast.LENGTH_LONG).show()
         } else if (leftOpBlock == null){
@@ -69,7 +70,7 @@ class BoolBinaryOpBlock : BoolBlock(){
 
 class NotBlock: BoolBlock(){
     var operandBlock: BoolBlock? = null
-    override fun getMyBool(context: Context): Pair<MyBool, List<String>>? {
+    override fun getMyBool(context: Context): Pair<MyBool, List<Stock>>? {
         if (operandBlock == null){
             Toast.makeText(context, "please fill in the operand", Toast.LENGTH_LONG).show()
         } else {
