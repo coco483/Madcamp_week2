@@ -1,7 +1,10 @@
 package com.example.madcamp_week2.MyLanguage
 
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import com.example.madcamp_week2.Class.Stock
+import com.example.madcamp_week2.Class.StrategyReturn
 import com.example.madcamp_week2.getHistoryData
 import com.example.madcamp_week2.parseHistoryData
 import com.example.madcamp_week2.stockData
@@ -14,23 +17,23 @@ data class Strategy (
     val actionList: List<Action>,
 ){
 
-    fun calculate(startDate: String, endDate: String, initialCash:Int): Double{
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun calculate(startDate: String, endDate: String, initialCash:Int): StrategyReturn {
         if (related_stock.isEmpty()) Log.d("Action", "There should be one stock involved")
 
         // request all stock price data from api
         val allStockData: MutableMap<String, Map<String, stockData>> = mutableMapOf()
-        // allStockData : stockID -> { date -> stockData }
+        // allStockData : stockName -> { date -> stockData }
         for (stock in related_stock.toSet()){
-            val dailyStockJson = getHistoryData(stock.id, startDate, endDate, 'D')
-            val dailyStockData = parseHistoryData(dailyStockJson!!)
-            allStockData[stock.id] = dailyStockData.associateBy { it.stck_bsop_date }
-            Log.d("Strategy", "involved stock ${stock} added: $dailyStockJson")
+            val dailyStockData = getHistoryData(stock.id, startDate, endDate, 'D')
+            allStockData[stock.name] = dailyStockData!!.associateBy { it.stck_bsop_date }
+            Log.d("Strategy", "involved stock ${stock} added: $dailyStockData")
         }
         // get all tradeRequest from all actions
         val tradeRequestList = mutableListOf<TradeRequest>()
         for (action in actionList){
-            val involvedStockIdList: List<String> = action.involvedStockList.map { it.id }
-            val actionInvolvedStockData =  allStockData.filterKeys { it in involvedStockIdList }
+            val involvedStockNameList: List<String> = action.involvedStockList.map { it.name }
+            val actionInvolvedStockData =  allStockData.filterKeys { it in involvedStockNameList }
             tradeRequestList.addAll(action.getAllRequests(startDate, endDate, actionInvolvedStockData))
         }
         Log.d("StrategyCalculate", "$tradeRequestList")
@@ -40,7 +43,7 @@ data class Strategy (
         for (request in tradeRequestList){
             capitalHandler.processRequest(request, allStockData)
         }
-        return capitalHandler.calculateCapital(endDate, allStockData) / initialCash.toDouble() * 100 - 100
+        return capitalHandler.calculateCapital(initialCash, endDate, allStockData)
     }
 
     private class CapitalHandler (
@@ -50,34 +53,46 @@ data class Strategy (
         fun processRequest(tradeRequest: TradeRequest, allStockData: Map<String, Map<String, stockData>>){
             when(tradeRequest.tradeType){
                 TradeType.BUY -> {
-                    val stockPrice = allStockData[tradeRequest.stockId]!![tradeRequest.date]!!.stck_clpr
+                    val stockPrice = allStockData[tradeRequest.stock.name]!![tradeRequest.date]!!.stck_clpr
                     val buyCashAmount = minOf(cashAmount, (stockPrice*tradeRequest.stockAmount).toInt())
                     val buyStockAmount = buyCashAmount / stockPrice
                     cashAmount -= buyCashAmount
-                    val currentStockAmount = stockHoldMap.getOrDefault(tradeRequest.stockId, 0.0)
-                    stockHoldMap[tradeRequest.stockId] = currentStockAmount.toFloat() + buyStockAmount.toFloat()
+                    val currentStockAmount = stockHoldMap.getOrDefault(tradeRequest.stock.name, 0.0)
+                    stockHoldMap[tradeRequest.stock.name] = currentStockAmount.toFloat() + buyStockAmount.toFloat()
                 }
                 TradeType.SELL -> {
-                    if (stockHoldMap[tradeRequest.stockId] != null){
-                        val stockPrice = allStockData[tradeRequest.stockId]!![tradeRequest.date]!!.stck_clpr
-                        val sellStockAmount = minOf(tradeRequest.stockAmount, stockHoldMap[tradeRequest.stockId]!!)
+                    if (stockHoldMap[tradeRequest.stock.name] != null){
+                        val stockPrice = allStockData[tradeRequest.stock.name]!![tradeRequest.date]!!.stck_clpr
+                        val sellStockAmount = minOf(tradeRequest.stockAmount, stockHoldMap[tradeRequest.stock.name]!!)
                         val sellCashAmount = stockPrice * sellStockAmount
-                        stockHoldMap[tradeRequest.stockId] = stockHoldMap[tradeRequest.stockId]!! - sellStockAmount
+                        stockHoldMap[tradeRequest.stock.name] = stockHoldMap[tradeRequest.stock.name]!! - sellStockAmount
                         cashAmount += sellCashAmount.toInt()
                     }
                 }
             }
         }
-        fun calculateCapital(endDate: String, allStockData: Map<String, Map<String, stockData>>): Int{
+        fun calculateCapital(initialCash: Int, endDate: String, allStockData: Map<String, Map<String, stockData>>): StrategyReturn{
             Log.d("StrategyCalculate", "$cashAmount, $stockHoldMap")
+            val _cashAmount = cashAmount
+            val _stockHoldMap = deepCopyMap(stockHoldMap)
             var currentCapitalValue = cashAmount
-            for ((stockId, holdAmount) in stockHoldMap){
-                val stockPrice = allStockData[stockId]!!.maxBy { it.key }.value.stck_clpr
+            for ((stockName, holdAmount) in stockHoldMap){
+                val stockPrice = allStockData[stockName]!!.maxBy { it.key }.value.stck_clpr
                 currentCapitalValue += (stockPrice * holdAmount).toInt()
             }
-            return currentCapitalValue
+            val returnRate = currentCapitalValue / initialCash.toDouble() * 100 - 10
+            return StrategyReturn(returnRate, _cashAmount, _stockHoldMap)
+        }
+
+        private fun deepCopyMap(original: MutableMap<String, Float>): MutableMap<String, Float> {
+            val copy = mutableMapOf<String, Float>()
+            for ((key, value) in original) {
+                copy[key] = value
+            }
+            return copy
         }
     }
+
 }
 
 
