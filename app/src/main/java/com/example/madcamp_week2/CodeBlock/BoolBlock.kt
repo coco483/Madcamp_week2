@@ -23,8 +23,9 @@ class CompareBlock: BoolBlock() {
             Toast.makeText(context, "비교연산: 오른쪽 피연산자를 선택하세요", Toast.LENGTH_LONG).show()
         } else if (leftOpBlock == null){
             Toast.makeText(context, "비교연산: 왼쪽 피연산자를 선택하세요", Toast.LENGTH_LONG).show()
-        } else if (comparator == null){
+        } else if (comparator == null) {
             Toast.makeText(context, "비교연산: 연산자를 선택하세요", Toast.LENGTH_SHORT).show()
+        } else {
             val (rightOperand, list1) = rightOpBlock!!.getMyFloat(context) ?: Pair(null, listOf())
             val (leftOperand, list2) = leftOpBlock!!.getMyFloat(context) ?: Pair(null, listOf())
             if (rightOperand != null && leftOperand != null) {
