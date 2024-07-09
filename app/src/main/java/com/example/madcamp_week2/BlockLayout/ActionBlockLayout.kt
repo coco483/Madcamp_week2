@@ -43,7 +43,7 @@ fun addTradePlanLayout(parentLayout: ViewGroup, context: Context, block:TradePla
             block.tradeType = if (isChecked) TradeType.SELL else TradeType.BUY
         }
         binding.blockTradePlanStockAmount.setOnClickListener {
-            showRadioDialog(context, "choose right operand", floatBlockFuntionList.keys.toList()) { i ->
+            showRadioDialog(context, "거래 수량", floatBlockFuntionList.keys.toList()) { i ->
                 block.amountBlock =
                     floatBlockFuntionList[i]?.let { it1 -> it1(binding.blockTradePlanStockAmount, context) }
             }

@@ -54,13 +54,13 @@ fun addFloatBinaryOpBlock(parentLayout: ViewGroup, context: Context, block: Floa
         setFloatOperator(binding.blockBinaryFloatOperator, block)
 
         binding.blockBinaryFloatRightOp.setOnClickListener {
-            showRadioDialog(context, "choose right operand", floatBlockFuntionList.keys.toList()) { i ->
+            showRadioDialog(context, "오른쪽 피연산자", floatBlockFuntionList.keys.toList()) { i ->
                 block.rightOpBlock =
                     floatBlockFuntionList[i]?.let { it1 -> it1(binding.blockBinaryFloatRightOp, context) }
             }
         }
         binding.blockBinaryFloatLeftOp.setOnClickListener {
-            showRadioDialog(context, "choose left operand", floatBlockFuntionList.keys.toList()) { i ->
+            showRadioDialog(context, "왼쪽 피연산자", floatBlockFuntionList.keys.toList()) { i ->
                 block.leftOpBlock =
                     floatBlockFuntionList[i]?.let { it1 -> it1(binding.blockBinaryFloatLeftOp, context) }
             }
@@ -71,7 +71,7 @@ fun addFloatBinaryOpBlock(parentLayout: ViewGroup, context: Context, block: Floa
             "*" to FloatOperator.MUL,
             "/" to FloatOperator.DIV)
         binding.blockBinaryFloatOperator.setOnClickListener {
-            showRadioDialog(context, "choose operator", floatOperatorMap.keys.toList()) { op ->
+            showRadioDialog(context, "연산자", floatOperatorMap.keys.toList()) { op ->
                 block.floatOperator = floatOperatorMap[op]
                 setFloatOperator(binding.blockBinaryFloatOperator, block)
             }

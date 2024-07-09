@@ -16,9 +16,9 @@ class FloatBinaryOpBlock : FloatBlock(){
     var floatOperator: FloatOperator? = null
     override fun getMyFloat(context: Context): Pair<MyFloat, List<Stock>>? {
         if (rightOpBlock == null) {
-            Toast.makeText(context, "please fill in the right operand", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, "사칙연산: 오른쪽 피연산자를 선택하세요", Toast.LENGTH_LONG).show()
         } else if (leftOpBlock == null){
-            Toast.makeText(context, "please fill in the left operand", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, "사칙연산: 왼쪽 피연산자를 선택하세요", Toast.LENGTH_LONG).show()
         } else {
             val (rightOperand, list1) = rightOpBlock!!.getMyFloat(context) ?: Pair(null, listOf())
             val (leftOperand, list2) = leftOpBlock!!.getMyFloat(context) ?: Pair(null, listOf())
@@ -39,7 +39,7 @@ class NumBlock : FloatBlock(){
     var num: Float? = null
     override fun getMyFloat(context: Context): Pair<MyFloat, List<Stock>>? {
         if (num == null) {
-            Toast.makeText(context, "please fill in the number", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "숫자를 입력하세요", Toast.LENGTH_SHORT).show()
             return null
         }
         else return Pair(MyFloat.MyNum(num!!), listOf())
@@ -53,7 +53,7 @@ class StockPriceBlock: FloatBlock() {
     var stock: Stock? = null
     override fun getMyFloat(context: Context): Pair<MyFloat, List<Stock>>? {
         if (stock == null) {
-            Toast.makeText(context, "please choose the stock", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "주식가격: 주식 종목을 입력하세요", Toast.LENGTH_SHORT).show()
             return null
         } else return Pair(MyFloat.MyStockPrice(stock!!), listOf(stock!!))
     }

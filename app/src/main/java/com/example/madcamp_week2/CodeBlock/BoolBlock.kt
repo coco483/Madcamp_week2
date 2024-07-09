@@ -20,12 +20,11 @@ class CompareBlock: BoolBlock() {
     var comparator: CompareOperator? = null
     override fun getMyBool(context: Context): Pair<MyBool, List<Stock>>? {
         if (rightOpBlock == null) {
-            Toast.makeText(context, "please fill in the right operand", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, "비교연산: 오른쪽 피연산자를 선택하세요", Toast.LENGTH_LONG).show()
         } else if (leftOpBlock == null){
-            Toast.makeText(context, "please fill in the left operand", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, "비교연산: 왼쪽 피연산자를 선택하세요", Toast.LENGTH_LONG).show()
         } else if (comparator == null){
-            Toast.makeText(context, "please choose in the comparator", Toast.LENGTH_LONG).show()
-        } else {
+            Toast.makeText(context, "비교연산: 연산자를 선택하세요", Toast.LENGTH_SHORT).show()
             val (rightOperand, list1) = rightOpBlock!!.getMyFloat(context) ?: Pair(null, listOf())
             val (leftOperand, list2) = leftOpBlock!!.getMyFloat(context) ?: Pair(null, listOf())
             if (rightOperand != null && leftOperand != null) {
@@ -47,11 +46,11 @@ class BoolBinaryOpBlock : BoolBlock(){
     var boolOperator: BoolOperator? = null
     override fun getMyBool(context: Context): Pair<MyBool, List<Stock>>? {
         if (rightOpBlock == null) {
-            Toast.makeText(context, "please fill in the right operand", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, "논리연산: 오른쪽 피연산자를 선택하세요", Toast.LENGTH_LONG).show()
         } else if (leftOpBlock == null){
-            Toast.makeText(context, "please fill in the left operand", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, "논리연산: 왼쪽 피연산자를 선택하세요", Toast.LENGTH_LONG).show()
         } else if (boolOperator == null){
-            Toast.makeText(context, "please choose the operator", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, "논리연산: 연산자를 선택하세요", Toast.LENGTH_LONG).show()
         } else {
             val (rightOperand, list1) = rightOpBlock!!.getMyBool(context) ?: Pair(null, listOf())
             val (leftOperand, list2) = leftOpBlock!!.getMyBool(context) ?: Pair(null, listOf())
@@ -72,7 +71,7 @@ class NotBlock: BoolBlock(){
     var operandBlock: BoolBlock? = null
     override fun getMyBool(context: Context): Pair<MyBool, List<Stock>>? {
         if (operandBlock == null){
-            Toast.makeText(context, "please fill in the operand", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, "not: 피연산자를 선택하세요", Toast.LENGTH_LONG).show()
         } else {
             val (operand, list) = operandBlock!!.getMyBool(context) ?: Pair(null, listOf())
             if(operand != null) {

@@ -38,7 +38,7 @@ class ActionBlockAdapter(
         setTradeTypeBlock(holder.binding.blockActionTradePlan, context, actionBlock.tradePlanBlock)
         // set child layout by user input
         holder.binding.blockActionCondition.setOnClickListener {
-            showRadioDialog(context, "choose condition for trade", boolBlockFunctionList.keys.toList()) { i ->
+            showRadioDialog(context, "거래 조건", boolBlockFunctionList.keys.toList()) { i ->
                 actionBlock.conditionBlock =
                     boolBlockFunctionList[i]?.let { it1 -> it1(holder.binding.blockActionCondition, context) }
             }

@@ -79,13 +79,13 @@ class StockDetailFragment : Fragment() {
             if (isFavorite) {
                 // Remove from favorites
                 UserDataHolder.removeFavorite(Stock(stockId, stockName, stockMarket))
-                Toast.makeText(context, "Removed from favorite list", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "즐겨찾기 해제", Toast.LENGTH_SHORT).show()
                 val user = UserDataHolder.getUser()
                 Log.d("StockDetailFragment", "User after removal: $user")
             } else {
                 // Add to favorites
                 UserDataHolder.addFavorite(Stock(stockId, stockName, stockMarket))
-                Toast.makeText(context, "Added to favorite list", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "즐겨찾기에 추가", Toast.LENGTH_SHORT).show()
                 val user = UserDataHolder.getUser()
                 Log.d("StockDetailFragment", "User after addal: $user")
             }
@@ -97,7 +97,7 @@ class StockDetailFragment : Fragment() {
             // Fetch user from server and compare IDs
             val user = UserDataHolder.getUser()
             if (user == null) {
-                Toast.makeText(context, "User data is not available", Toast.LENGTH_SHORT).show()
+                Log.d("StockDetail", "User data is not available")
                 return@setOnClickListener
             }
 
@@ -106,7 +106,7 @@ class StockDetailFragment : Fragment() {
                 override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                     if (response.isSuccessful) {
                         context?.let {
-                            Toast.makeText(it, "Added to favorite list", Toast.LENGTH_SHORT).show()
+                            Log.d("StockDetail", "Added to favorite list")
                         }
                     } else {
                         val errorMessage = "Failed to update favorite list: ${response.message()}"

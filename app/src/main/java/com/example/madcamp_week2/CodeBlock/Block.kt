@@ -13,11 +13,11 @@ class TradePlanBlock {
     var amountBlock: FloatBlock? = null
     fun getTradePlan(context: Context): Pair<TradePlan, List<Stock>>? {
         if (tradeType == null) {
-            Toast.makeText(context, "please fill in the tradeType", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, "거래 종류를 선택하세요", Toast.LENGTH_LONG).show()
         } else if (stock == null){
-            Toast.makeText(context, "please fill in the trade stock Name", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, "거래 종목을 선택하세요", Toast.LENGTH_LONG).show()
         } else if (amountBlock == null){
-            Toast.makeText(context, "please fill in the trade amount", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, "거래 수량을 선택하세요", Toast.LENGTH_LONG).show()
         } else {
             val (amount, idList) = amountBlock!!.getMyFloat(context) ?: Pair(null, listOf())
             if (amount != null){
@@ -37,9 +37,9 @@ class ActionBlock {
     var tradePlanBlock: TradePlanBlock? = null
     fun getAction(context: Context): Action? {
         if (conditionBlock == null) {
-            Toast.makeText(context, "please fill in the condition", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, "거래 조건을 선택하세요", Toast.LENGTH_LONG).show()
         } else if (tradePlanBlock == null){
-            Toast.makeText(context, "please fill in the tradePlan", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, "거래를 선택하세요", Toast.LENGTH_LONG).show()
         } else {
             val (condition, list1) = conditionBlock!!.getMyBool(context) ?: Pair(null, listOf())
             val (tradePlan, list2) = tradePlanBlock!!.getTradePlan(context) ?: Pair(null, listOf())

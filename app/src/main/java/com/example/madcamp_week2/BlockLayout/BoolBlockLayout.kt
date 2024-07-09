@@ -69,13 +69,13 @@ fun addBoolBinaryOpBlock(parentLayout: ViewGroup, context: Context, block: BoolB
         setBoolBlock(binding.blockBinaryBoolRightOp, context, block.rightOpBlock)
         setBoolOperator(binding.blockBinaryBoolOperator, block)
         binding.blockBinaryBoolRightOp.setOnClickListener {
-            showRadioDialog(context, "choose right operand", boolBlockFunctionList.keys.toList()) { i ->
+            showRadioDialog(context, "오른쪽 피연산자", boolBlockFunctionList.keys.toList()) { i ->
                 block.rightOpBlock =
                     boolBlockFunctionList[i]?.let { it1 -> it1(binding.blockBinaryBoolRightOp, context) }
             }
         }
         binding.blockBinaryBoolLeftOp.setOnClickListener {
-            showRadioDialog(context, "choose left operand", boolBlockFunctionList.keys.toList()) { i ->
+            showRadioDialog(context, "왼쪽 피연산자", boolBlockFunctionList.keys.toList()) { i ->
                 block.leftOpBlock =
                     boolBlockFunctionList[i]?.let { it1 -> it1(binding.blockBinaryBoolLeftOp, context) }
             }
@@ -84,7 +84,7 @@ fun addBoolBinaryOpBlock(parentLayout: ViewGroup, context: Context, block: BoolB
             "and" to BoolOperator.AND,
             "or" to BoolOperator.OR )
         binding.blockBinaryBoolOperator.setOnClickListener {
-            showRadioDialog(context, "choose operator", boolOperatorMap.keys.toList()) { op ->
+            showRadioDialog(context, "연산자", boolOperatorMap.keys.toList()) { op ->
                 binding.blockBinaryBoolOperator.text = op
                 block.boolOperator = boolOperatorMap[op]
             }
@@ -108,7 +108,7 @@ fun addNotBlock(parentLayout: ViewGroup, context: Context, block: NotBlock) {
     return addBlock(parentLayout, context, BlockNotBinding::inflate, block) { binding ->
         setBoolBlock(binding.blockNotOperand, context, block.operandBlock)
         binding.blockNotOperand.setOnClickListener {
-            showRadioDialog(context, "choose right operand", boolBlockFunctionList.keys.toList()) { i ->
+            showRadioDialog(context, "피연산자", boolBlockFunctionList.keys.toList()) { i ->
                 block.operandBlock =
                     boolBlockFunctionList[i]?.let { it1 -> it1(binding.blockNotOperand, context) }
             }

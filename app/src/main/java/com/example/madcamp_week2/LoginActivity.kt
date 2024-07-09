@@ -70,7 +70,7 @@ class LoginActivity : AppCompatActivity() {
             val account = completedTask.getResult(ApiException::class.java)
 
             // 구글 로그인 성공 처리
-            Toast.makeText(this, "구글 로그인 성공: ${account?.displayName}", Toast.LENGTH_SHORT).show()
+            Log.d("Login", "구글 로그인 성공: ${account?.displayName}")
 
             // 사용자 정보 구글 서버에서 받아서 서버에 전송
             UserDataHolder.setUser(account)
@@ -85,7 +85,6 @@ class LoginActivity : AppCompatActivity() {
                 loadPriceThread.join()
             } else {
                 Log.e("handleSignInResult", "com.example.madcamp_week2.Class.User data is null")
-                Toast.makeText(this, "사용자 데이터를 가져올 수 없습니다.", Toast.LENGTH_SHORT).show()
             }
 
             // MainActivity로 이동
@@ -126,7 +125,6 @@ class LoginActivity : AppCompatActivity() {
                         Log.d("Login", "Strategy list: ${UserDataHolder.strategyList}")
                     }
                     Log.d("checkUserOnServer", "com.example.madcamp_week2.Class.User already exists on server: ${response.body()}")
-                    Toast.makeText(this@LoginActivity, "서버에 이미 등록된 사용자입니다.", Toast.LENGTH_SHORT).show()
                 } else {
                     // 등록되지 않은 사용자인 경우
                     Log.d("checkUserOnServer", "com.example.madcamp_week2.Class.User not found on server, sending user data...")
@@ -137,7 +135,6 @@ class LoginActivity : AppCompatActivity() {
             override fun onFailure(call: Call<User>, t: Throwable) {
                 // 서버 요청 실패 처리
                 Log.e("checkUserOnServer", "Failed to check user on server: ${t.message}")
-                Toast.makeText(this@LoginActivity, "서버 사용자 확인 실패: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
     }
@@ -150,16 +147,13 @@ class LoginActivity : AppCompatActivity() {
             override fun onResponse(call: Call<User>, response: Response<User>) {
                 if (response.isSuccessful) {
                     Log.d("sendUserDataToServer", "서버에 사용자 정보 저장 성공: ${response.body()}")
-                    Toast.makeText(this@LoginActivity, "서버에 사용자 정보 저장 성공", Toast.LENGTH_SHORT).show()
                 } else {
                     Log.d("sendUserDataToServer", "fail to save: ${response.code()}")
-                    Toast.makeText(this@LoginActivity, "서버에 사용자 정보 저장 실패: ${response.code()}", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<User>, t: Throwable) {
                 Log.e("sendUserDataToServer", "fail to request: ${t.message}")
-                Toast.makeText(this@LoginActivity, "서버 요청 실패: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
     }
