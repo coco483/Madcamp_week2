@@ -88,7 +88,7 @@ class LoginActivity : AppCompatActivity() {
             }
 
             // MainActivity로 이동
-            val intent = Intent(this, MainActivity::class.java)
+            val intent = Intent(this, MainMenu::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
 
             // 500ms 후에 실행

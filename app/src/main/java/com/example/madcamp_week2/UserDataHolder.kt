@@ -11,6 +11,7 @@ object UserDataHolder {
     private val _favoriteList: MutableSet<Stock> = mutableSetOf()
     private val _strategyList: MutableList<Strategy> = mutableListOf()
 //    private val _favoriteNameList: MutableSet<String> = mutableSetOf()
+    private val _friendList: MutableList<User> = mutableListOf()
 
     fun setUser(account: GoogleSignInAccount?) {
         user = account?.let {
