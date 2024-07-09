@@ -5,18 +5,18 @@
         android:id="@+id/tab1"
         android:enabled="true"
         android:title="검색"
-        android:icon="@drawable/baseline_search_24"
+        android:icon="@drawable/research2"
         app:itemIconTint="@drawable/selector"/>
     <item
         android:id="@+id/tab2"
         android:enabled="true"
         android:title="전량 추가"
-        android:icon="@drawable/baseline_add_24"
+        android:icon="@drawable/add2"
         app:itemIconTint="@drawable/selector"/>
     <item
         android:id="@+id/tab3"
         android:enabled="true"
         android:title="내 전략"
-        android:icon="@drawable/baseline_list_24"
+        android:icon="@drawable/list2"
         app:itemIconTint="@drawable/selector"/>
 </menu>
