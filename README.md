@@ -28,24 +28,14 @@ STOP 세 가지 의미를 가지고 있습니다.
 2. STOP 어플의 Search, ToolBar, Practice의 약자.
 3. Stock ... Stocp ... Stop!?
 
-**“Tool Bar”**
-
-Tool Bar tab은
-
-**“Practice”**
-
 **“Search”**
 
-Search tab은 
+Search tab은 주식 종목을 검색할 수 있는 tab 입니다.
 
 **“Tool Bar”**
 
-Tool Bar tab은
+Tool Bar tab은 나의 전략을 block colding으로 구현할 수 있는 code 입니다.
 
 **“Practice”**
 
-
-
-
-
-[여행의 기록]에서 당신의 여행을 추가하고 확인해 보세요.
+Practice tab은 나의 거래 전략들을 통해 주식을 연습할 수 있는 tab 입니다.
