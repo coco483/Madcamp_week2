@@ -34,7 +34,7 @@ Search tab은 주식 종목을 검색할 수 있는 tab 입니다.
 
 **“Tool Bar”**
 
-Tool Bar tab은 나의 전략을 block colding으로 구현할 수 있는 code 입니다.
+Tool Bar tab은 나의 전략을 block colding으로 구현할 수 있는 tab 입니다.
 
 **“Practice”**
 
