@@ -70,7 +70,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="10dp"
-                    android:layout_marginBottom="10dp"
+                    android:layout_marginBottom="5dp"
                     android:orientation="horizontal"
                     app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                     app:spanCount="1" />
@@ -80,7 +80,10 @@
                 android:id="@+id/strategylist_returnRate_TV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="수익률: --%" />
+                android:layout_marginLeft="30dp"
+                android:text="수익률: --%"
+                android:textStyle="bold"
+                android:fontFamily="@font/pretendard1"/>
 
         </LinearLayout>
 
