@@ -39,3 +39,11 @@ Tool Bar tab은 나의 전략을 block colding으로 구현할 수 있는 tab �
 **“Practice”**
 
 Practice tab은 나의 거래 전략들을 통해 주식을 연습할 수 있는 tab 입니다.
+
+<div style="display: flex; flex-wrap: nowrap; justify-content: center;">
+    <img src="https://via.placeholder.com/180" alt="Image 1" width="180" style="margin-right: 30px;">
+    <img src="https://via.placeholder.com/180" alt="Image 2" width="180" style="margin-right: 30px;">
+    <img src="https://via.placeholder.com/180" alt="Image 3" width="180" style="margin-right: 30px;">
+    <img src="https://via.placeholder.com/180" alt="Image 4" width="180" style="margin-right: 30px;">
+</div>
+
