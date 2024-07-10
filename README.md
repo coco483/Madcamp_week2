@@ -41,9 +41,9 @@ Tool Bar tab은 나의 전략을 block colding으로 구현할 수 있는 tab �
 Practice tab은 나의 거래 전략들을 통해 주식을 연습할 수 있는 tab 입니다.
 
 <div style="display: flex; flex-wrap: nowrap; justify-content: center;">
-    <img src="https://via.placeholder.com/180" alt="Image 1" width="180" style="margin-right: 30px;">
-    <img src="https://via.placeholder.com/180" alt="Image 2" width="180" style="margin-right: 30px;">
-    <img src="https://via.placeholder.com/180" alt="Image 3" width="180" style="margin-right: 30px;">
-    <img src="https://via.placeholder.com/180" alt="Image 4" width="180" style="margin-right: 30px;">
+    <img src="https://github.com/coco483/Madcamp_week2/raw/main/assets/133734191/d3b4846f-bbd1-4825-8c47-9591e55d08c4.gif" style="margin-right: 30px;">
+    <img src="https://github.com/coco483/Madcamp_week2/raw/main/assets/133734191/a3062372-bc2b-4e56-93a9-6ac40654e12c.gif" style="margin-right: 30px;">
+    <img src="https://github.com/coco483/Madcamp_week2/raw/main/assets/133734191/d12bb009-29fe-4a9e-aabf-02876b489666.gif" style="margin-right: 30px;">
+    <img src="https://github.com/coco483/Madcamp_week2/raw/main/assets/133734191/2f754018-799f-42f0-8671-5535276a0857.gif" style="margin-right: 30px;">
 </div>
 
