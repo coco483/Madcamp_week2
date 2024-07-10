@@ -135,6 +135,7 @@
                 android:textColor="#1f4ef5"
                 android:fontFamily="@font/pretendard1"
                 android:gravity="start|center_vertical"
+                android:lineSpacingExtra="5dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>
@@ -149,6 +150,7 @@
                 android:fontFamily="@font/pretendard1"
                 android:textColor="#1f4ef5"
                 android:gravity="center_vertical"
+                android:lineSpacingExtra="5dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>
