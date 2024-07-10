@@ -38,6 +38,7 @@ class StrategyAddFragment: Fragment() {
     private var endDate:String = ""
     private var initialCash: Int = 1000000
     private var greatestReturnRate: Double? = null
+    private var title: String = "title"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -49,6 +50,8 @@ class StrategyAddFragment: Fragment() {
                 newActionBlock.setAllChild(action)
                 actionBlockList.add(newActionBlock)
             }
+            greatestReturnRate = UserDataHolder.strategyList[it].greatestReturnRate
+            title = UserDataHolder.strategyList[it].title
         }
     }
     override fun onCreateView(
@@ -116,56 +119,62 @@ class StrategyAddFragment: Fragment() {
             if (actionBlockList.isEmpty()) Toast.makeText(requireContext(), "1개 이상의 조건 거래가 필요합니다", Toast.LENGTH_SHORT).show()
             else{
                 val actionList:MutableList<Action> = mutableListOf()
-                val relatedStockIdList: MutableList<Stock> = mutableListOf()
+                val relatedStockIdSet: MutableSet<Stock> = mutableSetOf()
                 for (actionBlock in actionBlockList){
                     val action = actionBlock.getAction(requireContext())
                     if (action != null) {
                         actionList.add(action)
-                        relatedStockIdList += action.involvedStockList
+                        relatedStockIdSet.addAll(action.involvedStockList)
                     } else {
                         return@setOnClickListener
                     }
                 }
-                val strategy = Strategy("title", relatedStockIdList, actionList)
+                val strategy = Strategy(title, relatedStockIdSet.toList(), actionList)
                 Log.d("StrategyCalculate", "$startDate, $endDate, $initialCash, ${Strategy}")
                 val strategyReturn = strategy.calculate(startDate, endDate, initialCash)
-                greatestReturnRate = strategyReturn.returnRate
+                greatestReturnRate = (greatestReturnRate ?: Double.MIN_VALUE).coerceAtLeast(strategyReturn.returnRate)
                 strategy.greatestReturnRate = greatestReturnRate
+                Log.d("StrategyCalculate", "returnRate: $greatestReturnRate")
                 if (StrategyPos != null) UserDataHolder.updateStrategy(strategy, StrategyPos!!)
                 openShowReturnFragment(strategyReturn)
                 updateUserToServer()
             }
         }
         binding.fragmentStrategyAddSaveBTN.setOnClickListener {
-            var title = ""
             // gather actions and related Stocks, save in UserDataHolder
             if (actionBlockList.isEmpty()) Toast.makeText(requireContext(), "1개 이상의 조건 거래가 필요합니다", Toast.LENGTH_SHORT).show()
             else{
                 val actionList:MutableList<Action> = mutableListOf()
-                val relatedStockIdList: MutableList<Stock> = mutableListOf()
+                val relatedStockIdSet: MutableSet<Stock> = mutableSetOf()
                 for (actionBlock in actionBlockList){
                     val action = actionBlock.getAction(requireContext())
                     if (action != null) {
                         actionList.add(action)
-                        relatedStockIdList += action.involvedStockList
+                        relatedStockIdSet.addAll(action.involvedStockList)
                     } else return@setOnClickListener
                 }
                 val dialogView = layoutInflater.inflate(R.layout.dialog_edittext, null)
-                val editText = dialogView.findViewById<EditText>(R.id.dialog_ET)
-                // get user input for strategy title
-                AlertDialog.Builder(requireContext(), R.style.AppCompatAlertDialog)
-                    .setTitle("새로운 거래 전략의 이름")
-                    .setView(dialogView)
-                    .setPositiveButton("OK") { _, _ ->
-                        title = editText.text.toString()
-                        val strategy = Strategy(title, relatedStockIdList, actionList, greatestReturnRate)
-                        if (StrategyPos != null) UserDataHolder.updateStrategy(strategy, StrategyPos!!)
-                        else UserDataHolder.addStrategy(strategy)
-                        updateUserToServer()
-                    }
-                    .setNegativeButton("Cancel", null)
-                    .create()
-                    .show()
+                if (StrategyPos !=null) {
+                    val strategy = Strategy(title, relatedStockIdSet.toList(), actionList, greatestReturnRate)
+                    UserDataHolder.updateStrategy(strategy, StrategyPos!!)
+                    updateUserToServer()
+                }
+                else {
+                    val editText = dialogView.findViewById<EditText>(R.id.dialog_ET)
+                    // get user input for strategy title
+                    AlertDialog.Builder(requireContext(), R.style.AppCompatAlertDialog)
+                        .setTitle("새로운 거래 전략의 이름")
+                        .setView(dialogView)
+                        .setPositiveButton("OK") { _, _ ->
+                            title = editText.text.toString()
+                            val strategy = Strategy(title, relatedStockIdSet.toList(), actionList, greatestReturnRate)
+                            UserDataHolder.addStrategy(strategy)
+                            updateUserToServer()
+                        }
+                        .setNegativeButton("Cancel", null)
+                        .create()
+                        .show()
+                }
             }
             // post to ServerDB
 

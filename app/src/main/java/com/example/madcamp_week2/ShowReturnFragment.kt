@@ -51,7 +51,9 @@ class ShowReturnFragment: Fragment() {
         binding.fragmentShowReturnReturnRateTV.text = formattedReturnRate
         val nameStr = stockNameArray!!.joinToString(prefix = "현금\n", separator = "\n")
         val formattedCashAmount = cashAmount!!/10000
-        val amountStr = stocklAmountArray!!.joinToString(prefix = "${formattedCashAmount}만원\n", separator = "주\n", postfix = "주")
+        var amountStr = ""
+        if (stocklAmountArray!!.isEmpty()) amountStr = "${formattedCashAmount}만원\n"
+        else amountStr = stocklAmountArray!!.joinToString(prefix = "${formattedCashAmount}만원\n", separator = "주\n", postfix = "주")
         binding.fragmentShowReturnCapitalNameListTV.text = nameStr
         binding.fragmentShowReturnCapitalAmountListTV.text = amountStr
     }

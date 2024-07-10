@@ -81,7 +81,7 @@ data class Strategy (
                 val stockPrice = allStockData[stockName]!!.maxBy { it.key }.value.stck_clpr
                 currentCapitalValue += (stockPrice * holdAmount).toInt()
             }
-            val returnRate = currentCapitalValue / initialCash.toDouble() * 100 - 10
+            val returnRate = currentCapitalValue / initialCash.toDouble() * 100 - 100
             return StrategyReturn(returnRate, _cashAmount, _stockHoldMap)
         }
 
