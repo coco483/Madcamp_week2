@@ -29,12 +29,12 @@ import retrofit2.Response
 class StockDetailFragment : Fragment() {
     private var _binding: FragmentStockDetailBinding? = null
     private val binding get() = _binding!!
-    private var stockDataSeries = LineGraphSeries<DataPoint>()
+
 
     private lateinit var stockId: String
     private lateinit var stockName: String
     private lateinit var stockMarket: String
-
+    private val stockDataSeries = LineGraphSeries<DataPoint>()
     private var isFavorite = false // Track whether the stock is in favorites
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,8 +71,13 @@ class StockDetailFragment : Fragment() {
         // Update favorite button text based on initial state
         updateFavoriteButton()
 
-        // Reload graph with 'D' period
-        reloadGraph(binding.stockDetailGraphGV, 'D')
+        // Reload graph with '3M' period by default
+        reloadGraph(binding.stockDetailGraphGV, "3M")
+        binding.stockDetailGraphGV.addSeries(stockDataSeries)
+        // set period for graph
+        binding.stockDetail3MBTN.setOnClickListener { reloadGraph(binding.stockDetailGraphGV, "3M") }
+        binding.stockDetail1YBTN.setOnClickListener { reloadGraph(binding.stockDetailGraphGV, "1Y") }
+        binding.stockDetail5YBTN.setOnClickListener { reloadGraph(binding.stockDetailGraphGV, "5Y") }
 
         // Add to favorites button click listener
         binding.stockFavoriteBT.setOnClickListener {
@@ -144,27 +149,52 @@ class StockDetailFragment : Fragment() {
 
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun reloadGraph(graph: GraphView, period: Char) {
-        var dailyStockData = getHistoryData(stockId, "20160101", "20240706", period)
+    private fun reloadGraph(graph: GraphView, period: String) {
+        if ( period !in listOf("3M", "1Y", "5Y")) {
+            Log.d("ReloadGraph", "$period is not a valid input")
+            return
+        }
+        var interval = 'D'
+        val today = getCurrentDateInFormat()
+        var startDate = "20240710"
+        var returnStr = ""
+        when (period){
+            "3M" -> {
+                interval = 'D'
+                returnStr = "세달 전보다 "
+                startDate = getThreeMonthsBefore(startDate)
+            }
+            "1Y" -> {
+                interval = 'W'
+                returnStr = "1년 전보다 "
+                startDate = getOneYearBefore(startDate)
+            }
+            "5Y" -> {
+                interval = 'M'
+                returnStr = "5년 전보다 "
+                startDate = getFiveYearsBefore(startDate)
+            }
+        }
+        var dailyStockData = getHistoryData(stockId, startDate, today, interval)
 
         dailyStockData = dailyStockData.reversed()
-        if (dailyStockData != null) {
-            addStockDataToGraph(graph, dailyStockData)
-            formatGraphLabel(graph, dailyStockData)
-            customizeGraphView(graph)
-        }
+        replaceStockDataToGraph(graph, dailyStockData)
+        customizeGraphView(graph, dailyStockData)
+
     }
 
-    private fun addStockDataToGraph(graph: GraphView, stockDatas: List<stockData>) {
-        val maxDataPoints = stockDatas.size
+
+    private fun replaceStockDataToGraph(graph: GraphView, stockDatas: List<stockData>) {
         var dayCount = 0.0
+        val newDataPoints = mutableListOf<DataPoint>()
         for (stockData in stockDatas) {
             val x = dayCount
             dayCount += 1.0
             val y = stockData.stck_clpr
-            stockDataSeries.appendData(DataPoint(x, y), false, maxDataPoints)
+            newDataPoints.add(DataPoint(x,y))
+            //stockDataSeries.appendData(DataPoint(x, y), false, maxDataPoints)
         }
-        graph.addSeries(stockDataSeries)
+        stockDataSeries.resetData(newDataPoints.toTypedArray())
     }
 
     private fun formatGraphLabel(graph: GraphView, stockDatas: List<stockData>) {
@@ -187,7 +217,8 @@ class StockDetailFragment : Fragment() {
         graph.viewport.setMaxX(99.0)
     }
 
-    private fun customizeGraphView(graph: GraphView) {
+    private fun customizeGraphView(graph: GraphView, stockDatas: List<stockData>) {
+        val numDataPoints = stockDatas.size
         // Get the GridLabelRenderer from the GraphView
         val gridLabelRenderer = graph.gridLabelRenderer
 
@@ -197,6 +228,11 @@ class StockDetailFragment : Fragment() {
 
         // Hide grid lines
         gridLabelRenderer.gridStyle = GridLabelRenderer.GridStyle.NONE
+
+        graph.viewport.isXAxisBoundsManual = true
+        graph.viewport.setMinX(0.0)
+        graph.viewport.setMaxX(numDataPoints.toDouble())
+
     }
 
     override fun onDestroyView() {

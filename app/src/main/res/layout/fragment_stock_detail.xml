@@ -50,6 +50,34 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@+id/stock_detail_graph_GV">
+
+            <Button
+                android:id="@+id/stock_detail_3M_BTN"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="3달" />
+
+            <Button
+                android:id="@+id/stock_detail_1Y_BTN"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="1년" />
+
+            <Button
+                android:id="@+id/stock_detail_5Y_BTN"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="5년" />
+        </LinearLayout>
+
         <Button
             android:id="@+id/stock_favorite_BT"
             android:layout_width="290dp"

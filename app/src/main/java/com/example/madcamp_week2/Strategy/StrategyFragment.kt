@@ -43,8 +43,10 @@ class StrategyFragment : Fragment() {
         view.startAnimation(anim)
 
         // RecyclerView 설정
+        val blue = requireContext().getColor(R.color.teal_200)
+        val red = requireContext().getColor(R.color.purple_500)
         recyclerViewStrategy.layoutManager = LinearLayoutManager(requireContext())
-        strategyAdapter = StrategyAdapter(UserDataHolder.strategyList, setStrategyAddFragment) // 초기화면 빈 리스트로 시작
+        strategyAdapter = StrategyAdapter(red, blue, UserDataHolder.strategyList, setStrategyAddFragment) // 초기화면 빈 리스트로 시작
         recyclerViewStrategy.adapter = strategyAdapter
 
         // RecyclerView에 Divider 추가

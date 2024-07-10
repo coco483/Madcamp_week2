@@ -7,9 +7,32 @@ import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
 @RequiresApi(Build.VERSION_CODES.O)
-fun getOneMonthBefore(inputDate: String): String {
+fun getThreeMonthsBefore(inputDate: String): String {
     val formatter = DateTimeFormatter.ofPattern("yyyyMMdd")
     val date = LocalDate.parse(inputDate, formatter)
-    val oneMonthBefore = date.minus(1, ChronoUnit.MONTHS)
+    val oneMonthBefore = date.minus(3, ChronoUnit.MONTHS)
     return oneMonthBefore.format(formatter)
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun getOneYearBefore(inputDate: String): String {
+    val formatter = DateTimeFormatter.ofPattern("yyyyMMdd")
+    val date = LocalDate.parse(inputDate, formatter)
+    val oneMonthBefore = date.minus(1, ChronoUnit.YEARS)
+    return oneMonthBefore.format(formatter)
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun getFiveYearsBefore(inputDate: String): String {
+    val formatter = DateTimeFormatter.ofPattern("yyyyMMdd")
+    val date = LocalDate.parse(inputDate, formatter)
+    val oneMonthBefore = date.minus(5, ChronoUnit.YEARS)
+    return oneMonthBefore.format(formatter)
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun getCurrentDateInFormat(): String {
+    val currentDate = LocalDate.now()
+    val formatter = DateTimeFormatter.ofPattern("yyyyMMdd")
+    return currentDate.format(formatter)
 }

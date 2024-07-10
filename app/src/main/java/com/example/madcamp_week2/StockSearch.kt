@@ -18,16 +18,16 @@ data class stockData(val stck_bsop_date: String, val stck_clpr: Double)
 
 
 @RequiresApi(Build.VERSION_CODES.O)
-fun getHistoryData(stockCode: String, startDate: String, endDate: String, period: Char): List<stockData> {
+fun getHistoryData(stockCode: String, startDate: String, endDate: String, interval: Char): List<stockData> {
     val startDateAsInt = startDate.toInt()
     val dataList:MutableList<stockData> = mutableListOf()
     var nextEndDate = endDate
     while(startDateAsInt <= nextEndDate.toInt()){
-        val jsonStr = requestStockData(stockCode, startDate, nextEndDate, period)
+        val jsonStr = requestStockData(stockCode, startDate, nextEndDate, interval)
         val outputs = jsonStr?.let { parseHistoryData(it) }
         if (outputs == null) {
             return dataList
-        } else if (outputs.first().stck_clpr == 0.0) return dataList
+        } else if (outputs.isEmpty() || outputs.first().stck_clpr == 0.0) return dataList
         dataList.addAll(outputs.filter { it.stck_clpr != 0.0 })
         Log.d("GetHistoryData", "start: $startDateAsInt, end: $nextEndDate, $outputs")
         nextEndDate = getDayEarlier(outputs.last().stck_bsop_date)
@@ -36,10 +36,10 @@ fun getHistoryData(stockCode: String, startDate: String, endDate: String, period
     return dataList
 }
 
-fun requestStockData(stockCode: String, startDate: String, endDate: String, period: Char): String? {
+fun requestStockData(stockCode: String, startDate: String, endDate: String, interval: Char): String? {
     Log.d("ApiRequest", "stockCode: $stockCode, startDate: $startDate, endDate: $endDate")
-    if ( period !in listOf('D', 'W', 'M', 'Y')) {
-        Log.d("StockSearch", "$period is not a valid input")
+    if ( interval !in listOf('D', 'W', 'M', 'Y')) {
+        Log.d("StockSearch", "$interval is not a valid input")
         return null
     }
     val client = OkHttpClient()
@@ -49,13 +49,13 @@ fun requestStockData(stockCode: String, startDate: String, endDate: String, peri
         append("&fid_input_iscd=$stockCode")
         append("&fid_input_date_1=$startDate")
         append("&fid_input_date_2=$endDate")
-        append("&fid_period_div_code=$period")
+        append("&fid_period_div_code=$interval")
         append("&fid_org_adj_prc=1")
     }
     val request = Request.Builder()
         .url(dailyPriceUrl)
         .addHeader("content-type", "application/json")
-        .addHeader("authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsImF1ZCI6IjhjMDlmMzU1LTk2MTUtNDdiOS1hOTNhLTlmOGVlZWNiNmZkOCIsInByZHRfY2QiOiIiLCJpc3MiOiJ1bm9ndyIsImV4cCI6MTcyMDYxNjY0OCwiaWF0IjoxNzIwNTMwMjQ4LCJqdGkiOiJQU0NBTUNwUm5qSW81MkF0Y29veTNLU1REVkd4emx2TFhLTWcifQ.RebFg1bSIHTD5-67gP_Q2des27lT7SLaLtut_wCKOLOD_Op341mD7SEW50BE-BoaJ_Gw4zNLYd0ldoAUiw2u2Q")
+        .addHeader("authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsImF1ZCI6IjkwMTAwM2IyLTlkNDAtNDJiMS05MWU2LWVhZDUzMzQ5Njk1MCIsInByZHRfY2QiOiIiLCJpc3MiOiJ1bm9ndyIsImV4cCI6MTcyMDY2ODIxNywiaWF0IjoxNzIwNTgxODE3LCJqdGkiOiJQU0NBTUNwUm5qSW81MkF0Y29veTNLU1REVkd4emx2TFhLTWcifQ.3g3WKJOnXBSmHJj--Zl8RsspXM5YsTV82eLZ-0o3d8z1RMNMFUDCR_wUeztSsstsG5vrwlaO4BWuq3TG3SL6Gg")
         .addHeader("appkey", "PSCAMCpRnjIo52Atcooy3KSTDVGxzlvLXKMg")
         .addHeader("appsecret", "aJ4WQxVfByuf5WWoO5IeRFvphNJWBYJpq00zvobmtmx6w9n7CdxRj9mbK13S3F343wjI26kT3yvwcpozDPY5Hx3qH6ODmNuEUqoDbgGZ1seuwWSeT5X8bd/HkiqqN8kFlHVk1TlYkm1U5MXIqxAtnITJGSti7WEm9ggKTC3UY6zQDQ9oUAs=")
         .addHeader("tr_id", "FHKST03010100")
@@ -86,17 +86,3 @@ fun parseHistoryData(responseStr:String): List<stockData>{
 
 
 
-@RequiresApi(Build.VERSION_CODES.O)
-fun getDayEarlier(dateString: String): String {
-    // Define the date formatter
-    val formatter = DateTimeFormatter.ofPattern("yyyyMMdd")
-
-    // Parse the date string into a LocalDate object
-    val date = LocalDate.parse(dateString, formatter)
-
-    // Subtract one day from the date
-    val dayEarlier = date.minusDays(1)
-
-    // Format the new date back into a string
-    return dayEarlier.format(formatter)
-}

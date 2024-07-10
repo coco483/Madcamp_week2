@@ -1,11 +1,13 @@
 // StrategyAdapter.kt
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.madcamp_week2.MyLanguage.Strategy
@@ -14,7 +16,7 @@ import com.example.madcamp_week2.StockDetailFragment
 import com.example.madcamp_week2.Strategy.StrategyFragment
 import com.example.madcamp_week2.Strategy.TagAdapter
 
-class StrategyAdapter(private var itemList: MutableList<Strategy>, val onclick: (Int) -> Int) :
+class StrategyAdapter(val red:Int, val blue:Int, private var itemList: MutableList<Strategy>, val onclick: (Int) -> Int) :
     RecyclerView.Adapter<StrategyAdapter.Holder>() {
 
     interface OnItemClickListener {
@@ -70,10 +72,14 @@ class StrategyAdapter(private var itemList: MutableList<Strategy>, val onclick: 
 
             // 최고 수익률 설정
             if(strategyItem.greatestReturnRate != null) {
-                val formatReturnRate = "최고 수익률: " + String.format("%.2f", strategyItem.greatestReturnRate) + "%"
+                val formatReturnRate =
+                    "최고 수익률: " + String.format("%.2f", strategyItem.greatestReturnRate) + "%"
                 returnRate.text = formatReturnRate
+                if (strategyItem.greatestReturnRate!! < 0) {
+                    returnRate.setTextColor(blue)
+                }
+                else returnRate.setTextColor(red)
             }
-
             cardView.setOnClickListener {
                 onclick(position)
             }
