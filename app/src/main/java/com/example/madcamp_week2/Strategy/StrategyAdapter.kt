@@ -83,6 +83,10 @@ class StrategyAdapter(val red:Int, val blue:Int, private var itemList: MutableLi
             cardView.setOnClickListener {
                 onclick(position)
             }
+            cardView.setOnLongClickListener {
+                UserDataHolder.removeStrategy(position)
+                true
+            }
         }
     }
 }

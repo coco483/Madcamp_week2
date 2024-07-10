@@ -67,6 +67,12 @@ object UserDataHolder {
         }
     }
 
+    fun removeStrategy(pos: Int) {
+        if (pos in _strategyList.indices) {
+            _strategyList.removeAt(pos)
+        }
+    }
+
 //    fun addFavoriteName(stockName: String) {
 //        _favoriteNameList.add(stockName)
 //    }
