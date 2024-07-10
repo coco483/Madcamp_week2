@@ -6,53 +6,77 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
+        android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/stock_detail_name_TV"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="주식이름"
-            android:textSize="25sp"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:fontFamily="@font/pretendard1"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginTop="20dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            />
+            android:id="@+id/linear1">
 
-        <TextView
-            android:id="@+id/stock_detail_market_TV"
-            android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/stock_detail_name_TV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="주식이름"
+                android:textSize="25sp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:fontFamily="@font/pretendard1"
+                android:layout_marginTop="20dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <TextView
+                android:id="@+id/stock_detail_currentPrice_TV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="25sp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:fontFamily="@font/pretendard1"
+                android:text="00000원"
+                android:layout_marginTop="20dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="주식시장"
-            android:textSize="17sp"
-            android:fontFamily="@font/pretendard1"
-            app:layout_constraintTop_toBottomOf="@id/stock_detail_name_TV"
+            app:layout_constraintTop_toBottomOf="@id/linear1"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
             android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"/>
+            android:layout_marginRight="20dp"
+            android:id="@+id/linear2">
 
-        <TextView
-            android:id="@+id/stock_detail_currentPrice_TV"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="00000원"
-            app:layout_constraintEnd_toEndOf="parent" />
+            <TextView
+                android:id="@+id/stock_detail_market_TV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="주식시장"
+                android:textSize="17sp"
+                android:fontFamily="@font/pretendard1"
+                android:layout_marginTop="10dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
 
-
-        <TextView
-            android:id="@+id/stock_detail_changeRate_TV"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toTopOf="@+id/stock_detail_graph_GV"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:text="__전보다 +20.43%" />
+            <TextView
+                android:id="@+id/stock_detail_changeRate_TV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="__전보다 +20.43%"
+                android:textSize="17sp"
+                android:fontFamily="@font/pretendard1"
+                android:layout_marginTop="10dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <com.jjoe64.graphview.GraphView
             android:id="@+id/stock_detail_graph_GV"
@@ -63,20 +87,22 @@
             android:layout_marginBottom="20dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:elevation="0dp"
-            app:layout_constraintTop_toBottomOf="@id/stock_detail_market_TV"
+            app:layout_constraintTop_toBottomOf="@id/linear2"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@+id/stock_detail_graph_GV">
+            app:layout_constraintTop_toBottomOf="@id/stock_detail_graph_GV"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp">
 
             <Button
                 android:id="@+id/stock_detail_3M_BTN"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="3달"
@@ -86,7 +112,7 @@
 
             <Button
                 android:id="@+id/stock_detail_1Y_BTN"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="1년"
@@ -96,7 +122,7 @@
 
             <Button
                 android:id="@+id/stock_detail_5Y_BTN"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="5년"
