@@ -2,7 +2,6 @@ package com.example.madcamp_week2
 
 import FavoriteAdapter
 import UserDataHolder
-import UserDataHolder.favoriteList
 import android.R
 import android.app.AlertDialog
 import android.os.Bundle
@@ -48,14 +47,9 @@ class StockSearchFragment: Fragment() {
 
         // Get favorite list from FavoriteHolder
 //        val favoriteList = UserDataHolder.favoriteList
-        val favoriteNameList = favoriteList.mapNotNull { stock ->
-            stock.name
-        } // 여기 나중에 바꾸기
-
-        Log.d("StockSearchFragment", "Favorite list: $favoriteNameList")
 
         // Create adapter and set it to RecyclerView
-        val adapter = FavoriteAdapter(favoriteList)
+        val adapter = FavoriteAdapter(UserDataHolder.favoriteList)
         binding.stockSearchFavoriteRV.layoutManager = LinearLayoutManager(requireContext())
         binding.stockSearchFavoriteRV.adapter = adapter
 

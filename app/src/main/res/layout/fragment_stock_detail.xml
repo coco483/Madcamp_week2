@@ -81,9 +81,9 @@
         <com.jjoe64.graphview.GraphView
             android:id="@+id/stock_detail_graph_GV"
             android:layout_width="match_parent"
-            android:layout_height="350dp"
+            android:layout_height="330dp"
             android:background="@drawable/graph"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="30dp"
             android:layout_marginBottom="20dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
