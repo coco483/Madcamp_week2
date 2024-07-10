@@ -41,10 +41,10 @@ class ShowReturnFragment: Fragment() {
         val df = DecimalFormat("#.00")
         if (returnRate!! >= 0.0) {
             formattedReturnRate = "+"
-            binding.fragmentShowReturnReturnRateTV.setTextColor(getResources().getColor(R.color.purple_200))
+            binding.fragmentShowReturnReturnRateTV.setTextColor(getResources().getColor(R.color.red))
         }
         else {
-            binding.fragmentShowReturnReturnRateTV.setTextColor(getResources().getColor(R.color.teal_200))
+            binding.fragmentShowReturnReturnRateTV.setTextColor(getResources().getColor(R.color.blue))
         }
         formattedReturnRate += (String.format("%.3f", returnRate) + "%")
 

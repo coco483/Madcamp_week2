@@ -36,3 +36,19 @@ fun getCurrentDateInFormat(): String {
     val formatter = DateTimeFormatter.ofPattern("yyyyMMdd")
     return currentDate.format(formatter)
 }
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun getDayEarlier(dateString: String): String {
+    val formatter = DateTimeFormatter.ofPattern("yyyyMMdd")
+    val date = LocalDate.parse(dateString, formatter)
+    val dayEarlier = date.minusDays(1)
+    return dayEarlier.format(formatter)
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun getWeekEarlier(dateString: String): String {
+    val formatter = DateTimeFormatter.ofPattern("yyyyMMdd")
+    val date = LocalDate.parse(dateString, formatter)
+    val dayEarlier = date.minusDays(7)
+    return dayEarlier.format(formatter)
+}

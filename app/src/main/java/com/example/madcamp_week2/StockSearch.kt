@@ -13,7 +13,7 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 data class Outputs(val output1: Output1, val output2: List<stockData>)
-data class Output1(val hts_kor_isnm: String)
+data class Output1(val hts_kor_isnm: String, val stck_oprc: String, val hts_avls: String)
 data class stockData(val stck_bsop_date: String, val stck_clpr: Double)
 
 
@@ -34,6 +34,13 @@ fun getHistoryData(stockCode: String, startDate: String, endDate: String, interv
 
     }
     return dataList
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun getOnedayPrice(stockCode: String): String{
+    val jsonStr = requestStockData(stockCode, "20240709", "20240709", 'D')
+    val stockData = Gson().fromJson(jsonStr, Outputs::class.java)
+    return stockData.output1.stck_oprc
 }
 
 fun requestStockData(stockCode: String, startDate: String, endDate: String, interval: Char): String? {

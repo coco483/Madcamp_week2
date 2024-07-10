@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
+import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
@@ -36,7 +37,8 @@ class StockDetailFragment : Fragment() {
     private lateinit var stockMarket: String
     private val stockDataSeries = LineGraphSeries<DataPoint>()
     private var isFavorite = false // Track whether the stock is in favorites
-
+    private var red:Int = 0
+    private var blue:Int = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -61,6 +63,8 @@ class StockDetailFragment : Fragment() {
         val anim = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_in_left)
         binding.root.startAnimation(anim)
 
+        red = this.resources.getColor(com.example.madcamp_week2.R.color.red)
+        blue = this.resources.getColor(com.example.madcamp_week2.R.color.blue)
         // Set the stock name and market to the respective TextViews
         binding.stockDetailNameTV.text = stockName
         binding.stockDetailMarketTV.text = stockMarket
@@ -71,13 +75,16 @@ class StockDetailFragment : Fragment() {
         // Update favorite button text based on initial state
         updateFavoriteButton()
 
+        // 시가총액, 현재가 update
+        val currentPriceStr = "${getOnedayPrice(stockId)}원"
+        binding.stockDetailCurrentPriceTV.text = currentPriceStr
         // Reload graph with '3M' period by default
-        reloadGraph(binding.stockDetailGraphGV, "3M")
+        reloadGraph(binding.stockDetailGraphGV, binding.stockDetailChangeRateTV,"3M")
         binding.stockDetailGraphGV.addSeries(stockDataSeries)
         // set period for graph
-        binding.stockDetail3MBTN.setOnClickListener { reloadGraph(binding.stockDetailGraphGV, "3M") }
-        binding.stockDetail1YBTN.setOnClickListener { reloadGraph(binding.stockDetailGraphGV, "1Y") }
-        binding.stockDetail5YBTN.setOnClickListener { reloadGraph(binding.stockDetailGraphGV, "5Y") }
+        binding.stockDetail3MBTN.setOnClickListener { reloadGraph(binding.stockDetailGraphGV, binding.stockDetailChangeRateTV,"3M") }
+        binding.stockDetail1YBTN.setOnClickListener { reloadGraph(binding.stockDetailGraphGV, binding.stockDetailChangeRateTV,"1Y") }
+        binding.stockDetail5YBTN.setOnClickListener { reloadGraph(binding.stockDetailGraphGV,binding.stockDetailChangeRateTV, "5Y") }
 
         // Add to favorites button click listener
         binding.stockFavoriteBT.setOnClickListener {
@@ -149,7 +156,7 @@ class StockDetailFragment : Fragment() {
 
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun reloadGraph(graph: GraphView, period: String) {
+    private fun reloadGraph(graph: GraphView, changeRateText: TextView, period: String) {
         if ( period !in listOf("3M", "1Y", "5Y")) {
             Log.d("ReloadGraph", "$period is not a valid input")
             return
@@ -176,15 +183,28 @@ class StockDetailFragment : Fragment() {
             }
         }
         var dailyStockData = getHistoryData(stockId, startDate, today, interval)
-
-        dailyStockData = dailyStockData.reversed()
-        replaceStockDataToGraph(graph, dailyStockData)
+        dailyStockData = dailyStockData.reversed() // 최근 데이터가 가장 뒤에
+        val startPrice = dailyStockData.first().stck_clpr
+        val endPrice = dailyStockData.last().stck_clpr
+        val changeRate = (endPrice/startPrice -1) * 100
+        var color = red
+        if (changeRate>=0) {
+            returnStr += '+'
+            color = red
+        } else {
+            color = blue
+        }
+        // set change rate string
+        returnStr += String.format("%.2f", changeRate) + "%"
+        changeRateText.setTextColor(color)
+        changeRateText.text = returnStr
+        // set graph
+        replaceStockDataToGraph(graph, dailyStockData, color)
         customizeGraphView(graph, dailyStockData)
-
     }
 
 
-    private fun replaceStockDataToGraph(graph: GraphView, stockDatas: List<stockData>) {
+    private fun replaceStockDataToGraph(graph: GraphView, stockDatas: List<stockData>, color: Int) {
         var dayCount = 0.0
         val newDataPoints = mutableListOf<DataPoint>()
         for (stockData in stockDatas) {
@@ -194,6 +214,7 @@ class StockDetailFragment : Fragment() {
             newDataPoints.add(DataPoint(x,y))
             //stockDataSeries.appendData(DataPoint(x, y), false, maxDataPoints)
         }
+        stockDataSeries.color = color
         stockDataSeries.resetData(newDataPoints.toTypedArray())
     }
 
@@ -228,7 +249,6 @@ class StockDetailFragment : Fragment() {
 
         // Hide grid lines
         gridLabelRenderer.gridStyle = GridLabelRenderer.GridStyle.NONE
-
         graph.viewport.isXAxisBoundsManual = true
         graph.viewport.setMinX(0.0)
         graph.viewport.setMaxX(numDataPoints.toDouble())
