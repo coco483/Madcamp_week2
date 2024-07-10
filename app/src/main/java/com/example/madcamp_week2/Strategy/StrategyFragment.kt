@@ -48,10 +48,10 @@ class StrategyFragment : Fragment() {
         recyclerViewStrategy.layoutManager = LinearLayoutManager(requireContext())
         strategyAdapter = StrategyAdapter(red, blue, UserDataHolder.strategyList, setStrategyAddFragment) // 초기화면 빈 리스트로 시작
         recyclerViewStrategy.adapter = strategyAdapter
-
-        // RecyclerView에 Divider 추가
-        val dividerItemDecoration = DividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL)
-        recyclerViewStrategy.addItemDecoration(dividerItemDecoration) // divider 넣기
+//
+//        // RecyclerView에 Divider 추가
+//        val dividerItemDecoration = DividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL)
+//        recyclerViewStrategy.addItemDecoration(dividerItemDecoration) // divider 넣기
     }
 
     val setStrategyAddFragment = { position:Int ->

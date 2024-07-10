@@ -6,7 +6,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        >
 
         <TextView
             android:id="@+id/stock_detail_name_TV"
@@ -21,7 +22,8 @@
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginTop="20dp"
             android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"/>
+            android:layout_marginRight="20dp"
+            />
 
         <TextView
             android:id="@+id/stock_detail_market_TV"
@@ -61,21 +63,30 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="3달" />
+                android:text="3달"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/pretendard1"
+                android:textColor="@drawable/buttontext"/>
 
             <Button
                 android:id="@+id/stock_detail_1Y_BTN"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="1년" />
+                android:text="1년"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/pretendard1"
+                android:textColor="@drawable/buttontext"/>
 
             <Button
                 android:id="@+id/stock_detail_5Y_BTN"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="5년" />
+                android:text="5년"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/pretendard1"
+                android:textColor="@drawable/buttontext"/>
         </LinearLayout>
 
         <Button
